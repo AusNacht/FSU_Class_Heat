@@ -17,6 +17,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MainActivity extends FragmentActivity {
 
 	GoogleMap map;
+	final int loveCap = 15, hcbCap = 10;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
