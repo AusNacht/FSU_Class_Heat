@@ -4,9 +4,11 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 
 
 public class MainActivity extends FragmentActivity {
@@ -20,7 +22,13 @@ public class MainActivity extends FragmentActivity {
 				
         map = ( (SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.mapView)).getMap();
         
-
+        map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        LatLng loc = new LatLng(30.44388, -84.29806);
+        CameraUpdate center = CameraUpdateFactory.newLatLng(loc);
+        CameraUpdate zoom = CameraUpdateFactory.zoomTo(16);
+        
+        map.moveCamera(center);
+        map.animateCamera(zoom);
 	}
 
 	@Override
