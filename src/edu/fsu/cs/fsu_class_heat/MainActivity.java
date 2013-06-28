@@ -17,15 +17,16 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MainActivity extends FragmentActivity {
 
 	GoogleMap map;
+    MarkerOptions mol;
 	final int loveCap = 15, hcbCap = 10;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-				
+		
         map = ( (SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.mapView)).getMap();
-        
+            
         map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
         LatLng loc = new LatLng(30.44388, -84.29806);
         CameraUpdate center = CameraUpdateFactory.newLatLng(loc);
@@ -35,10 +36,38 @@ public class MainActivity extends FragmentActivity {
         map.animateCamera(zoom);
         
         LatLng love = new LatLng(30.446112,-84.299566);
-        
-        MarkerOptions mol = new MarkerOptions().position(love).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)).visible(true).draggable(false);
-        
-        map.addMarker(mol);
+       
+
+        int classnum_lov = 15;
+        //classnum_lov = query_lov(getTime(), getDay());     
+
+
+        float classpercent_lov;
+
+        classpercent_lov =(float) classnum_lov/loveCap; 
+        if(classpercent_lov == 0)
+        {
+        	mol = new MarkerOptions().position(love).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).visible(false).draggable(false);
+        }
+
+        else if(classpercent_lov <= .5 && classpercent_lov > 0)
+        {
+        	mol = new MarkerOptions().position(love).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)).visible(true).draggable(false);
+        }
+
+        else if(classpercent_lov > .5 && classpercent_lov <= .75 )
+        {
+        	mol = new MarkerOptions().position(love).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)).visible(true).draggable(false);
+        }
+
+        else if(classpercent_lov > .75)
+        {
+        	mol = new MarkerOptions().position(love).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).visible(true).draggable(false);
+        }
+
+
+        map.addMarker(mol);      
+		map.setInfoWindowAdapter(new PopupAdapter(getLayoutInflater()));
 	}
 
 	@Override
