@@ -22,7 +22,7 @@ public class MainActivity extends FragmentActivity {
 	
 	Cursor mCursor;
 	GoogleMap map;
-    MarkerOptions mol;
+	MarkerOptions mol;
 	final int loveCap = 15, hcbCap = 10;
 	
 	// Integers to keep count of the number of class
@@ -175,5 +175,43 @@ public class MainActivity extends FragmentActivity {
 
 		return daychar;
 	}
+	
+   	// Count the number of classes going on at a given time
+	// Call example: Monday 3:00 PM will be count_classes('M', 300);
+    public void count_classes(char CURRENT_DAY, int CURRENT_TIME) {
+
+        // Main loop: iterate through contentprovider and take count of classes
+    	mCursor = getContentResolver().query(class_database.CONTENT_URI, null, null, null, null);
+        mCursor.moveToFirst( );	 
+        
+        // Reset counts
+        HCB = 0;
+        LOV = 0;
+
+        while(mCursor.isAfterLast( ) == false) {
+        	
+        	// Get data from database
+        	String CLASS_DAYS = mCursor.getString(2).trim( );
+        	int CLASS_BEGIN = Integer.valueOf(mCursor.getString(3).trim( ));
+        	int CLASS_END = Integer.valueOf(mCursor.getString(4).trim( ));
+
+        	if(mCursor.getString(1).equals("HCB")) {
+        		if(CLASS_DAYS.contains(Character.toString(CURRENT_DAY))) {
+        			if(CLASS_BEGIN <= CURRENT_TIME && CURRENT_TIME <= CLASS_END) {
+        				HCB++;
+            		}
+        		}
+        	}
+        	else if(mCursor.getString(1).equals("LOV")) {
+        		if(CLASS_DAYS.contains(Character.toString(CURRENT_DAY))) {
+        			if(CLASS_BEGIN <= CURRENT_TIME && CURRENT_TIME <= CLASS_END) {
+        				LOV++;
+            		}
+        		}
+        	}
+        	mCursor.moveToNext( );
+        }
+        mCursor.close( );
+    }
 
 }
