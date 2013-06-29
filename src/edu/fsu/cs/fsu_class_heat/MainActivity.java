@@ -6,12 +6,23 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.SupportMapFragment;
+
+
+
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.format.Time;
+import android.util.Log;
 import android.view.Menu;
 
 
@@ -43,6 +54,8 @@ public class MainActivity extends FragmentActivity {
         
         // ***** Database Portion *****
         mCursor = getContentResolver().query(class_database.CONTENT_URI, null, null, null, null);
+        
+        Log.i("marker", String.valueOf(mCursor));
 
         if(mCursor != null) {
         	
@@ -81,19 +94,22 @@ public class MainActivity extends FragmentActivity {
         	}
         }
         mCursor.close( );
+
         // ***** End of Database Portion *****
         
         
         
         LatLng love = new LatLng(30.446112,-84.299566);
 
-        int classnum_lov = 15;
-        //classnum_lov = query_lov(getTime(), getDay());     
+        //count_classes(getDay(), getTime());
+        count_classes('M', 1303);
+        
+        Log.i("marker", String.valueOf(LOV));
 
 
         float classpercent_lov;
 
-        classpercent_lov =(float) classnum_lov/loveCap; 
+        classpercent_lov =(float) LOV/loveCap; 
         if(classpercent_lov == 0)
         {
         	mol = new MarkerOptions().position(love).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).visible(false).draggable(false);
@@ -151,23 +167,23 @@ public class MainActivity extends FragmentActivity {
 
 		if(dayint == 1)
 		{
-			daychar = 'm';
+			daychar = 'M';
 		}
 		else if(dayint == 2)
 		{
-			daychar = 't';
+			daychar = 'T';
 		}
 		else if(dayint == 3)
 		{
-			daychar = 'w';
+			daychar = 'W';
 		}
 		else if(dayint == 4)
 		{
-			daychar = 'r';
+			daychar = 'R';
 		}
 		else if(dayint == 5)
 		{
-			daychar = 'f';
+			daychar = 'F';
 		}
 
 		return daychar;
@@ -178,37 +194,37 @@ public class MainActivity extends FragmentActivity {
     	public void count_classes(char CURRENT_DAY, int CURRENT_TIME) {
 
         // Main loop: iterate through contentprovider and take count of classes
-    	mCursor = getContentResolver().query(class_database.CONTENT_URI, null, null, null, null);
-        mCursor.moveToFirst( );	 
-        
-        // Reset counts
-        HCB = 0;
-        LOV = 0;
+    		mCursor = getContentResolver().query(class_database.CONTENT_URI, null, null, null, null);
+    		mCursor.moveToFirst();	 
 
-        while(mCursor.isAfterLast( ) == false) {
-        	
-        	// Get data from database
-        	String CLASS_DAYS = mCursor.getString(2).trim( );
-        	int CLASS_BEGIN = Integer.valueOf(mCursor.getString(3).trim( ));
-        	int CLASS_END = Integer.valueOf(mCursor.getString(4).trim( ));
+    		// Reset counts
+    		HCB = 0;
+    		LOV = 0;
 
-        	if(mCursor.getString(1).equals("HCB")) {
-        		if(CLASS_DAYS.contains(Character.toString(CURRENT_DAY))) {
-        			if(CLASS_BEGIN <= CURRENT_TIME && CURRENT_TIME <= CLASS_END) {
-        				HCB++;
-            		}
-        		}
-        	}
-        	else if(mCursor.getString(1).equals("LOV")) {
-        		if(CLASS_DAYS.contains(Character.toString(CURRENT_DAY))) {
-        			if(CLASS_BEGIN <= CURRENT_TIME && CURRENT_TIME <= CLASS_END) {
-        				LOV++;
-            		}
-        		}
-        	}
-        	mCursor.moveToNext( );
-        }
-        mCursor.close( );
-    }
+    		while(mCursor.isAfterLast( ) == false) {
+
+    			// Get data from database
+    			String CLASS_DAYS = mCursor.getString(2).trim( );
+    			int CLASS_BEGIN = Integer.valueOf(mCursor.getString(3).trim( ));
+    			int CLASS_END = Integer.valueOf(mCursor.getString(4).trim( ));
+
+    			if(mCursor.getString(1).equals("HCB")) {
+    				if(CLASS_DAYS.contains(Character.toString(CURRENT_DAY))) {
+    					if(CLASS_BEGIN <= CURRENT_TIME && CURRENT_TIME <= CLASS_END) {
+    						HCB++;
+    					}
+    				}
+    			}
+    			else if(mCursor.getString(1).equals("LOV")) {
+    				if(CLASS_DAYS.contains(Character.toString(CURRENT_DAY))) {
+    					if(CLASS_BEGIN <= CURRENT_TIME && CURRENT_TIME <= CLASS_END) {
+    						LOV++;
+    					}
+    				}
+    			}
+    			mCursor.moveToNext( );
+    		}
+    		mCursor.close( );
+    	}
 
 }
