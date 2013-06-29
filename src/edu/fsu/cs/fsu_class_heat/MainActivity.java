@@ -177,8 +177,8 @@ public class MainActivity extends FragmentActivity {
 	}
 	
    	// Count the number of classes going on at a given time
-	// Call example: Monday 3:00 PM will be count_classes('M', 300);
-    public void count_classes(char CURRENT_DAY, int CURRENT_TIME) {
+	// Call example: Monday 3:00 PM will be count_classes('M', 1500);
+    	public void count_classes(char CURRENT_DAY, int CURRENT_TIME) {
 
         // Main loop: iterate through contentprovider and take count of classes
     	mCursor = getContentResolver().query(class_database.CONTENT_URI, null, null, null, null);
