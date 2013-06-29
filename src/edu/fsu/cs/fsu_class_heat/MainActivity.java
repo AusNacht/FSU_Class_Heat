@@ -6,9 +6,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-import com.example.contentprovider.Provider;
-import com.example.contentprovider.R;
-
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
