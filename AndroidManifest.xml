@@ -11,7 +11,10 @@
     <permission
         android:name="edu.fsu.cs.fsu_class_heat.MAPS_RECEIVE"
         android:protectionLevel="signature"/>
-        
+       
+    <permission android:name="edu.fsu.cs.fsu_class_heat.class_database.permission.READ_PERMISSION"></permission>
+    <permission android:name="edu.fsu.cs.fsu_class_heat.class_database.permission.WRITE_PERMISSION"></permission>
+    
     <uses-permission android:name="edu.fsu.cs.fsu_class_heat.MAPS_RECEIVE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
@@ -39,10 +42,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-       
-        <provider android:name="class_database" 
-            android:authorities="@string/cdb_authority">
-            
+        
+        <provider 
+          	android:authorities="@string/cdb_authority"
+            android:name="edu.fsu.cs.fsu_class_heat.class_database" 
+            android:readPermission="edu.fsu.cs.fsu_class_heat.class_database.permission.READ_PERMISSION" 
+            android:writePermission="edu.fsu.cs.fsu_class_heat.class_database.permission.WRITE_PERMISSION">
         </provider>
         
          <meta-data 

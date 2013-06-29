@@ -1,24 +1,33 @@
 package edu.fsu.cs.fsu_class_heat;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+import com.example.contentprovider.Provider;
+import com.example.contentprovider.R;
+
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.format.Time;
 import android.view.Menu;
 
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-
 
 public class MainActivity extends FragmentActivity {
-
+	
+	Cursor mCursor;
 	GoogleMap map;
     MarkerOptions mol;
 	final int loveCap = 15, hcbCap = 10;
+	
+	// Integers to keep count of the number of class
+	int HCB = 0;
+	int LOV = 0;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +44,51 @@ public class MainActivity extends FragmentActivity {
         map.moveCamera(center);
         map.animateCamera(zoom);
         
+        // ***** Database Portion *****
+        mCursor = getContentResolver().query(class_database.CONTENT_URI, null, null, null, null);
+
+        if(mCursor != null) {
+        	
+        	// if contentprovider is empty, load the dataset into content provider
+        	// if contentprovider is not empty, there is no need to import the dataset
+        	if(mCursor.getCount( ) <= 0) {
+                Uri mNewUri;
+                ContentValues mNewValues = new ContentValues();
+
+                // Retrieve dataset textfile in res/raw/class_dataset.txt
+                InputStream inputStream = this.getResources().openRawResource(R.raw.class_dataset);
+                InputStreamReader inputreader = new InputStreamReader(inputStream);
+                BufferedReader buffreader = new BufferedReader(inputreader);
+                
+                String line;
+                
+                // Iterate each line of the dataset file
+                // Split each line into tokens and load into the database
+                try {
+                    while (( line = buffreader.readLine()) != null) {
+                    	
+                    	StringTokenizer line_tokens = new StringTokenizer(line, "\t");
+                    	
+                        mNewValues.put(class_database.COLUMN_BUILDING, line_tokens.nextToken( ));
+                        mNewValues.put(class_database.COLUMN_DAYS, line_tokens.nextToken( ));
+                        mNewValues.put(class_database.COLUMN_BEGIN, line_tokens.nextToken( ));
+                        mNewValues.put(class_database.COLUMN_END, line_tokens.nextToken( ));
+                        mNewUri = getContentResolver().insert(class_database.CONTENT_URI, mNewValues);
+                      }
+                 } catch (IOException e) {
+             	   
+                 }
+                
+                // Reinitialize database cursor
+                mCursor = getContentResolver().query(class_database.CONTENT_URI, null, null, null, null);
+        	}
+        }
+        mCursor.close( );
+        // ***** End of Database Portion *****
+        
+        
+        
         LatLng love = new LatLng(30.446112,-84.299566);
-       
 
         int classnum_lov = 15;
         //classnum_lov = query_lov(getTime(), getDay());     
