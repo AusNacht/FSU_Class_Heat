@@ -14,8 +14,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.SupportMapFragment;
 
-
-
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
