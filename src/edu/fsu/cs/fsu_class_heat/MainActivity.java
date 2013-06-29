@@ -9,8 +9,10 @@ import java.util.StringTokenizer;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.SupportMapFragment;
 
@@ -28,7 +30,7 @@ public class MainActivity extends FragmentActivity {
 	
 	Cursor mCursor;
 	GoogleMap map;
-	MarkerOptions mol;
+	MarkerOptions mo_lov, mo_hcb;
 	final int loveCap = 15, hcbCap = 10;
 	
 	// Integers to keep count of the number of class
@@ -53,8 +55,6 @@ public class MainActivity extends FragmentActivity {
         // ***** Database Portion *****
         mCursor = getContentResolver().query(class_database.CONTENT_URI, null, null, null, null);
         
-        Log.i("marker", String.valueOf(mCursor));
-
         if(mCursor != null) {
         	
         	// if contentprovider is empty, load the dataset into content provider
@@ -98,39 +98,84 @@ public class MainActivity extends FragmentActivity {
         
         
         LatLng love = new LatLng(30.446112,-84.299566);
+        LatLng hcb = new LatLng(30.443291,-84.297034);
 
         //count_classes(getDay(), getTime());
         count_classes('M', 1303);
         
         Log.i("marker", String.valueOf(LOV));
+        Log.i("marker", String.valueOf(HCB));
 
 
-        float classpercent_lov;
+        float classpercent_lov, classpercent_hcb;
 
         classpercent_lov =(float) LOV/loveCap; 
+        classpercent_hcb = (float) HCB/hcbCap;
         if(classpercent_lov == 0)
         {
-        	mol = new MarkerOptions().position(love).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).visible(false).draggable(false);
+        	mo_lov = new MarkerOptions().title("Love Building").position(love).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).visible(false).draggable(false);
         }
 
         else if(classpercent_lov <= .5 && classpercent_lov > 0)
         {
-        	mol = new MarkerOptions().position(love).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)).visible(true).draggable(false);
+        	mo_lov = new MarkerOptions().title("Love Building").position(love).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)).visible(true).draggable(false);
         }
 
         else if(classpercent_lov > .5 && classpercent_lov <= .75 )
         {
-        	mol = new MarkerOptions().position(love).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)).visible(true).draggable(false);
+        	mo_lov = new MarkerOptions().title("Love Building").position(love).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)).visible(true).draggable(false);
         }
 
         else if(classpercent_lov > .75)
         {
-        	mol = new MarkerOptions().position(love).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).visible(true).draggable(false);
+        	mo_lov = new MarkerOptions().title("Love Building").position(love).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).visible(true).draggable(false);
+        }
+        
+        
+        if(classpercent_hcb == 0)
+        {
+        	mo_hcb = new MarkerOptions().title("HCB").position(hcb).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).visible(false).draggable(false);
+        }
+
+        else if(classpercent_hcb <= .5 && classpercent_hcb > 0)
+        {
+        	mo_hcb = new MarkerOptions().title("HCB").position(hcb).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)).visible(true).draggable(false);
+        }
+
+        else if(classpercent_hcb > .5 && classpercent_hcb <= .75 )
+        {
+        	mo_hcb = new MarkerOptions().title("HCB").position(hcb).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)).visible(true).draggable(false);
+        }
+
+        else if(classpercent_hcb > .75)
+        {
+        	mo_hcb = new MarkerOptions().title("HCB").position(hcb).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).visible(true).draggable(false);
         }
 
 
-        map.addMarker(mol);      
-		map.setInfoWindowAdapter(new PopupAdapter(getLayoutInflater()));
+        map.addMarker(mo_lov);
+        map.addMarker(mo_hcb);
+		
+		map.setOnMarkerClickListener(new OnMarkerClickListener(){
+			
+			@Override
+			public boolean onMarkerClick(Marker marker)
+			{
+				Log.i("marker", "here");
+				if(marker.getTitle().toString().equals(mo_hcb.getTitle().toString()))
+				{
+					marker.setSnippet("Capacity: " + String.valueOf(hcbCap) + "\nIn-Use: " + String.valueOf(HCB) + "\nEmpty: " + String.valueOf(hcbCap-HCB));
+				}
+				
+				if(marker.getTitle().toString().equals(mo_lov.getTitle().toString()))
+				{
+					Log.i("marker", "here");
+					marker.setSnippet("Capacity: " + String.valueOf(loveCap) + "\nIn-Use: " + String.valueOf(LOV) + "\nEmpty: " + String.valueOf(loveCap-LOV));
+				}
+				
+				return false;
+			}
+		});
 	}
 
 	@Override
