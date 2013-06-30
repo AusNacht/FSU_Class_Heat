@@ -4,17 +4,15 @@
     <string name="app_name">FSU_Class_Heat</string>
     <string name="action_settings">Settings</string>
     <string name="cdb_authority">edu.fsu.cs.fsu_class_heat.class_database</string>
-	<string name="api_key">AIzaSyC9re8oUHWJOMbmc58MR3SFr8BIgqphhuY</string>
-	
-	<string name="capacityLabel">Capacity: </string>
-	<string name="usedLabel">In use: </string>
-	<string name="emptyLabel">Empty: </string>
-	
-	<string name="capacity"> </string>
-	<string name="used"> </string>
-	<string name="empty"> </string>
-	
-	<string name="title">Love Building</string>
-	
-	
+    <string name="api_key">AIzaSyC9re8oUHWJOMbmc58MR3SFr8BIgqphhuY</string>
+    <string name="capacityLabel">Capacity: </string>
+    <string name="usedLabel">In use: </string>
+    <string name="emptyLabel">Empty: </string>
+    <string name="capacity"></string>
+    <string name="used"></string>
+    <string name="empty"></string>
+    <string name="title">Love Building</string>
+    <string name="title_activity_map_frag">MapFrag</string>
+    <string name="hello_world">Hello world!</string>
+
 </resources>
