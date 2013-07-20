@@ -41,8 +41,8 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
-        map = ( (MapFragment)getFragmentManager().findFragmentById(R.id.mapView)).getMap();
+	
+		map = ( (MapFragment)getFragmentManager().findFragmentById(R.id.mapView)).getMap();
             
         map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
         LatLng loc = new LatLng(30.44388, -84.29806);
