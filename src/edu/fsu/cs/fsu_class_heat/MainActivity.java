@@ -37,6 +37,18 @@ public class MainActivity extends Activity {
 	int HCB = 0;
 	int LOV = 0;
 	
+	final int MONDAY = 1;
+	final int TUESDAY = 2;
+	final int WEDNESDAY = 3;
+	final int THURSDAY = 4;
+	final int FRIDAY = 5;
+	final int SPRING = 1;
+	final int SUMMER = 2;
+	final int FALL = 3;
+	
+	int daySelection = MONDAY;
+	int semesterSelection = SPRING;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

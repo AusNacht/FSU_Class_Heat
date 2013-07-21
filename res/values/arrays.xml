@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="sem_options">
+        <item>"Spring"</item>
+        <item>"Summer</item>
+        <item>"Fall"</item>
+    </string-array>
+    <string-array name="day_options">
+        <item>"Monday"</item>
+        <item>"Tuesday"</item>
+        <item>"Wednesday"</item>
+        <item>"Thursday"</item>
+        <item>"Friday"</item>
+    </string-array>
+
+</resources>
