@@ -2,11 +2,11 @@
 
     <item
         android:id="@+id/menuSem"
-        android:actionLayout="@layout/sem_action"
+        android:actionViewClass="android.widget.Spinner"
         android:showAsAction="always"/>
     <item
         android:id="@+id/menuDay"
-        android:actionLayout="@layout/day_action"
+        android:actionViewClass="android.widget.Spinner"
         android:showAsAction="always"/>
     <item
         android:id="@+id/action_settings"
