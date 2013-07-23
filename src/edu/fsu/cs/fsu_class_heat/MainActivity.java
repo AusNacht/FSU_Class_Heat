@@ -9,7 +9,6 @@ import java.util.StringTokenizer;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.format.Time;
@@ -23,8 +22,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -46,7 +43,16 @@ public class MainActivity extends Activity {
 	// Integers to keep count of the number of class
 	int HCB = 0;
 	int LOV = 0;
-
+	int CAR = 0;
+	int FLH = 0;
+	int OSB = 0;
+	int BEL = 0;
+	int HWC = 0;
+	int LSB = 0;
+	int RBA = 0;
+	int RBB = 0;
+	int MCH = 0;
+	
 	final int MONDAY = 0;
 	final int TUESDAY = 1;
 	final int WEDNESDAY = 2;
@@ -101,15 +107,13 @@ public class MainActivity extends Activity {
 			// provider
 			// if contentprovider is not empty, there is no need to import the
 			// dataset
-			if (mCursor.getCount() <= 0) {
+			if (mCursor.getCount( ) <= 0) {
 				Uri mNewUri;
 				ContentValues mNewValues = new ContentValues();
 
 				// Retrieve dataset textfile in res/raw/class_dataset.txt
-				InputStream inputStream = this.getResources().openRawResource(
-						R.raw.class_dataset);
-				InputStreamReader inputreader = new InputStreamReader(
-						inputStream);
+				InputStream inputStream = this.getResources( ).openRawResource(R.raw.class_dataset);
+				InputStreamReader inputreader = new InputStreamReader(inputStream);
 				BufferedReader buffreader = new BufferedReader(inputreader);
 
 				String line;
@@ -117,23 +121,20 @@ public class MainActivity extends Activity {
 				// Iterate each line of the dataset file
 				// Split each line into tokens and load into the database
 				try {
-					while ((line = buffreader.readLine()) != null) {
+					while ((line = buffreader.readLine( )) != null) {
+						StringTokenizer line_tokens = new StringTokenizer(line, ",");
 
-
-						StringTokenizer line_tokens = new StringTokenizer(line,
-								",");
 						mNewValues.put(class_database.COLUMN_BUILDING,
-								line_tokens.nextToken());
-
+								line_tokens.nextToken( ));
 						mNewValues.put(class_database.COLUMN_DAYS,
-								line_tokens.nextToken());
-						
+								line_tokens.nextToken( ));						
 						mNewValues.put(class_database.COLUMN_BEGIN,
-								line_tokens.nextToken());
-
+								line_tokens.nextToken( ));
 						mNewValues.put(class_database.COLUMN_END,
-								line_tokens.nextToken());
-						mNewUri = getContentResolver().insert(
+								line_tokens.nextToken( ));
+						mNewValues.put(class_database.COLUMN_SEMESTER,
+								line_tokens.nextToken( ));
+						mNewUri = getContentResolver( ).insert(
 								class_database.CONTENT_URI, mNewValues);
 					}
 				} catch (IOException e) {
@@ -153,7 +154,7 @@ public class MainActivity extends Activity {
 		LatLng hcb = new LatLng(30.443291, -84.297034);
 
 		// count_classes(getDay(), getTime());
-		count_classes('M', 1303);
+		count_classes('M', 1303, 0);
 
 		Log.i("marker", String.valueOf(LOV));
 		Log.i("marker", String.valueOf(HCB));
@@ -399,8 +400,8 @@ public class MainActivity extends Activity {
 	}
 
 	// Count the number of classes going on at a given time
-	// Call example: Monday 3:00 PM will be count_classes('M', 1500);
-	public void count_classes(char CURRENT_DAY, int CURRENT_TIME) {
+	// Call example: Monday 3:00 PM Spring will be count_classes('M', 1500, 0);
+	public void count_classes(char CURRENT_DAY, int CURRENT_TIME, int CURRENT_SEMESTER) {
 
 		// Main loop: iterate through contentprovider and take count of classes
 		mCursor = getContentResolver().query(class_database.CONTENT_URI, null,
@@ -410,27 +411,129 @@ public class MainActivity extends Activity {
 		// Reset counts
 		HCB = 0;
 		LOV = 0;
-
+		CAR = 0;
+		FLH = 0;
+		OSB = 0;
+		BEL = 0;
+		HWC = 0;
+		LSB = 0;
+		RBA = 0;
+		RBB = 0;
+		MCH = 0;
+		
 		while (mCursor.isAfterLast() == false) {
 
 			// Get data from database
-			String CLASS_DAYS = mCursor.getString(2).trim();
-			int CLASS_BEGIN = Integer.valueOf(mCursor.getString(3).trim());
-			int CLASS_END = Integer.valueOf(mCursor.getString(4).trim());
-
+			String CLASS_DAYS = mCursor.getString(2).trim( );
+			int CLASS_BEGIN = Integer.valueOf(mCursor.getString(3).trim( ));
+			int CLASS_END = Integer.valueOf(mCursor.getString(4).trim( ));
+			String getSemester = mCursor.getString(5).trim( );
+			int CLASS_SEMESTER = 0;
+			
+			if(getSemester.equals("spring"))
+				CLASS_SEMESTER = 0;
+			else if(getSemester.equals("summer"))
+				CLASS_SEMESTER = 1;
+			else if(getSemester.equals("fall"))
+				CLASS_SEMESTER = 2;
+			
 			if (mCursor.getString(1).equals("HCB")) {
 				if (CLASS_DAYS.contains(Character.toString(CURRENT_DAY))) {
 					if (CLASS_BEGIN <= CURRENT_TIME
 							&& CURRENT_TIME <= CLASS_END) {
-						HCB++;
+						if(CLASS_SEMESTER == CURRENT_SEMESTER) {
+							HCB++;
+						}
 					}
 				}
 			} else if (mCursor.getString(1).equals("LOV")) {
 				if (CLASS_DAYS.contains(Character.toString(CURRENT_DAY))) {
 					if (CLASS_BEGIN <= CURRENT_TIME
 							&& CURRENT_TIME <= CLASS_END) {
-						LOV++;
-
+						if(CLASS_SEMESTER == CURRENT_SEMESTER) {
+							LOV++;
+						}
+					}
+				}
+			} else if (mCursor.getString(1).equals("CAR")) {
+				if (CLASS_DAYS.contains(Character.toString(CURRENT_DAY))) {
+					if (CLASS_BEGIN <= CURRENT_TIME
+							&& CURRENT_TIME <= CLASS_END) {
+						if(CLASS_SEMESTER == CURRENT_SEMESTER) {
+							CAR++;
+						}
+					}
+				}
+			} else if (mCursor.getString(1).equals("FLH")) {
+				if (CLASS_DAYS.contains(Character.toString(CURRENT_DAY))) {
+					if (CLASS_BEGIN <= CURRENT_TIME
+							&& CURRENT_TIME <= CLASS_END) {
+						if(CLASS_SEMESTER == CURRENT_SEMESTER) {
+							FLH++;
+						}
+					}
+				}
+			} else if (mCursor.getString(1).equals("OSB")) {
+				if (CLASS_DAYS.contains(Character.toString(CURRENT_DAY))) {
+					if (CLASS_BEGIN <= CURRENT_TIME
+							&& CURRENT_TIME <= CLASS_END) {
+						if(CLASS_SEMESTER == CURRENT_SEMESTER) {
+							OSB++;
+						}
+					}
+				}
+			} else if (mCursor.getString(1).equals("BEL")) {
+				if (CLASS_DAYS.contains(Character.toString(CURRENT_DAY))) {
+					if (CLASS_BEGIN <= CURRENT_TIME
+							&& CURRENT_TIME <= CLASS_END) {
+						if(CLASS_SEMESTER == CURRENT_SEMESTER) {
+							BEL++;
+						}
+					}
+				}
+			} else if (mCursor.getString(1).equals("HWC")) {
+				if (CLASS_DAYS.contains(Character.toString(CURRENT_DAY))) {
+					if (CLASS_BEGIN <= CURRENT_TIME
+							&& CURRENT_TIME <= CLASS_END) {
+						if(CLASS_SEMESTER == CURRENT_SEMESTER) {
+							HWC++;
+						}
+					}
+				}
+			} else if (mCursor.getString(1).equals("LSB")) {
+				if (CLASS_DAYS.contains(Character.toString(CURRENT_DAY))) {
+					if (CLASS_BEGIN <= CURRENT_TIME
+							&& CURRENT_TIME <= CLASS_END) {
+						if(CLASS_SEMESTER == CURRENT_SEMESTER) {
+							LSB++;
+						}
+					}
+				}
+			} else if (mCursor.getString(1).equals("RBA")) {
+				if (CLASS_DAYS.contains(Character.toString(CURRENT_DAY))) {
+					if (CLASS_BEGIN <= CURRENT_TIME
+							&& CURRENT_TIME <= CLASS_END) {
+						if(CLASS_SEMESTER == CURRENT_SEMESTER) {
+							RBA++;
+						}
+					}
+				}
+			} else if (mCursor.getString(1).equals("RBB")) {
+				if (CLASS_DAYS.contains(Character.toString(CURRENT_DAY))) {
+					if (CLASS_BEGIN <= CURRENT_TIME
+							&& CURRENT_TIME <= CLASS_END) {
+						if(CLASS_SEMESTER == CURRENT_SEMESTER) {
+							RBB++;
+						}
+					}
+				}
+			} else if (mCursor.getString(1).equals("MCH")) {
+				if (CLASS_DAYS.contains(Character.toString(CURRENT_DAY))) {
+					if (CLASS_BEGIN <= CURRENT_TIME
+							&& CURRENT_TIME <= CLASS_END) {
+						if(CLASS_SEMESTER == CURRENT_SEMESTER) {
+							MCH++;
+						}
 					}
 				}
 			}
@@ -611,8 +714,5 @@ public class MainActivity extends Activity {
 			return def;
 			//break;
 		}
-
-
 	}
-
 }

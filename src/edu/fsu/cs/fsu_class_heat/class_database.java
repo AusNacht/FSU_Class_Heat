@@ -7,16 +7,17 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.net.Uri;
+import android.net.Uri; 
 
 public class class_database extends ContentProvider {
 
-    public final static String DBNAME = "NameDatabase";
+    public final static String DBNAME = "HeatDatabase";
     public final static String TABLE_NAMESTABLE = "namestable";
     public final static String COLUMN_BUILDING = "building_name";
     public final static String COLUMN_DAYS = "day_time";
     public final static String COLUMN_BEGIN = "begin_time";
     public final static String COLUMN_END = "end_time";
+    public final static String COLUMN_SEMESTER = "semester";
     
     public static final String AUTHORITY = "edu.fsu.cs.fsu_class_heat";
     public static final Uri CONTENT_URI = Uri.parse("content://edu.fsu.cs.fsu_class_heat.class_database/" + TABLE_NAMESTABLE);
@@ -36,6 +37,8 @@ public class class_database extends ContentProvider {
             COLUMN_BEGIN +
             " TEXT," +
             COLUMN_END +
+            " TEXT," +
+            COLUMN_SEMESTER +
             " TEXT)";
 
     @Override
@@ -52,6 +55,7 @@ public class class_database extends ContentProvider {
         String day_time = values.getAsString(COLUMN_BUILDING).trim( );
         String begin_time = values.getAsString(COLUMN_BEGIN).trim( );
         String end_time = values.getAsString(COLUMN_END).trim( );
+        String semester = values.getAsString(COLUMN_SEMESTER).trim( );
         
         if(building_name.equals(""))
             return null;
@@ -63,6 +67,9 @@ public class class_database extends ContentProvider {
             return null;
 
         if(end_time.equals(""))
+        	return null;
+        
+        if(semester.equals(""))
         	return null;
         
         long id = mOpenHelper.getWritableDatabase().insert(TABLE_NAMESTABLE, null, values);
