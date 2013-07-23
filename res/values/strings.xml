@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Class Heat</string>
+    <string name="app_name">FSU Class Heat</string>
     <string name="action_settings">Settings</string>
     <string name="cdb_authority">edu.fsu.cs.fsu_class_heat.class_database</string>
     <string name="capacityLabel">Capacity: </string>
