@@ -121,7 +121,7 @@ public class MainActivity extends Activity {
 
 
 						StringTokenizer line_tokens = new StringTokenizer(line,
-								"\t");
+								",");
 						mNewValues.put(class_database.COLUMN_BUILDING,
 								line_tokens.nextToken());
 
