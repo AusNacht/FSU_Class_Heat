@@ -21,7 +21,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -78,12 +81,14 @@ public class MainActivity extends Activity {
 	final int SUMMER = 1;
 	final int FALL = 2;
 
-	//user selection global variables 
+	// user selection global variables
 	int daySelection = MONDAY;
 	int semesterSelection = SPRING;
-	int hourSelection = 1300;
-	
-	//Actionbar spinners
+	int hourSelection = 0;
+	int minuteSelection = 0;
+	int amPmSelection = 0; //0 is am, 1 is pm
+
+	// Actionbar spinners
 	private MenuItem mSpinnerItem1 = null;
 	private MenuItem mSpinnerItem2 = null;
 
@@ -96,12 +101,57 @@ public class MainActivity extends Activity {
 		getActionBar().setDisplayShowTitleEnabled(false);
 		// end set action bar
 
-		
-		//get the map fragment
+		SeekBar seekBar = (SeekBar) findViewById(R.id.seekBar1);
+		final TextView textView = (TextView) findViewById(R.id.textView1);
+		textView.setText("" + "12" + ":" + "00" + " AM");
+		seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+			public void onStopTrackingTouch(SeekBar bar) {
+				int value = bar.getProgress(); // the value of the seekBar
+												// progress
+				if(amPmSelection ==0)
+				Toast.makeText(getApplicationContext(), String.format("%02d", hourSelection) + ":" + String.format("%02d", minuteSelection) + " AM",
+						Toast.LENGTH_SHORT).show();
+				else 
+					Toast.makeText(getApplicationContext(), String.format("%02d", hourSelection) + ":" + String.format("%02d", minuteSelection) + " PM",
+							Toast.LENGTH_SHORT).show();
+				
+				//delete toast and run query on time
+			}
+
+			public void onStartTrackingTouch(SeekBar bar) {
+
+			}
+
+			public void onProgressChanged(SeekBar bar, int paramInt,
+					boolean paramBoolean) {
+				if(paramInt == 100) 
+					paramInt = 99;//handle the wraparound
+				int numMinutes = (paramInt * (24 * 60)) / 100;
+				int numHours = numMinutes / 60;
+				int amOrPm = numHours / 12;
+				numMinutes = ((numMinutes % 60) / 15)*15;
+				if(numHours == 0 || numHours == 12)
+					numHours = 12;
+				else
+					numHours = numHours%12;
+				hourSelection = numHours;
+				minuteSelection = numMinutes;
+				amPmSelection = amOrPm;
+
+				if (amOrPm == 0)
+					textView.setText("" + String.format("%02d", numHours) + ":" + String.format("%02d", numMinutes) + " AM");
+				else
+					textView.setText("" + String.format("%02d", numHours) + ":" + String.format("%02d", numMinutes) + " PM");
+				
+			}
+		});
+
+		// get the map fragment
 		map = ((MapFragment) getFragmentManager()
 				.findFragmentById(R.id.mapView)).getMap();
 
-		//set the map fragment to FSU
+		// set the map fragment to FSU
 		map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
 		LatLng loc = new LatLng(30.44388, -84.29806);
 		CameraUpdate center = CameraUpdateFactory.newLatLng(loc);
@@ -109,7 +159,7 @@ public class MainActivity extends Activity {
 
 		map.moveCamera(center);
 		map.animateCamera(zoom);
-		//end set up map fragment
+		// end set up map fragment
 
 		// ***** Database Portion *****
 		mCursor = getContentResolver().query(class_database.CONTENT_URI, null,
