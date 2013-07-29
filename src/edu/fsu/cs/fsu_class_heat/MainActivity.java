@@ -40,8 +40,8 @@ public class MainActivity extends Activity {
 
 	Cursor mCursor;
 	GoogleMap map;
-	MarkerOptions mo_lov, mo_hcb;
-	final int loveCap = 15, hcbCap = 10;
+	MarkerOptions mo_lov, mo_hcb,mo_caroth,mo_carr,mo_fish,mo_osb,mo_bel,mo_wel,mo_shor,mo_rova,mo_rovb;
+
 
 	// Integers to keep count of the number of class
 	int HCB = 0;
@@ -186,7 +186,7 @@ public class MainActivity extends Activity {
 		map.animateCamera(zoom);
 		// end set up map fragment
 
-		marker();
+		//marker('M');
 	}// end onCreate
 
 	@Override
@@ -290,6 +290,7 @@ public class MainActivity extends Activity {
 		switch (item.getItemId()) {
 		case R.id.menuCurrent:
 			setCurrent();
+			marker('M', 1303, 1);
 			return true;
 
 		default:
@@ -370,7 +371,6 @@ public class MainActivity extends Activity {
 		}
 
 		seekBar.setProgress(seekProgress);
-		marker();
 
 		return true;
 	}
@@ -747,7 +747,7 @@ public class MainActivity extends Activity {
 		}
 	}
 	
-	public void marker()
+	public void marker(char day, int time, int semester)
 	{
 
 		// ***** Database Portion *****
@@ -806,20 +806,35 @@ public class MainActivity extends Activity {
 
 		// ***** End of Database Portion *****
 
-		LatLng love = new LatLng(30.446112, -84.299566);
-		LatLng hcb = new LatLng(30.443291, -84.297034);
+		LatLng love = new LatLng(30.446056,-84.299587);
+		LatLng hcb = new LatLng(30.443226,-84.297034);
+		LatLng carr = new LatLng(30.445113,-84.298729);
+		LatLng caroth = new LatLng(30.445501,-84.300059);
+		LatLng rova = new LatLng(30.444225,-84.295864);
+		LatLng rovb = new LatLng(30.443762,-84.295349);
+		LatLng bel = new LatLng(30.443032,-84.295864);
+		LatLng shor = new LatLng(30.441006,-84.296025);
+		LatLng osb = new LatLng(30.443975,-84.300145);
+		LatLng fish = new LatLng(30.444086,-84.300628);
+		LatLng well = new LatLng(30.441579,-84.299169);
 
 		// count_classes(getDay(), getTime());
-		count_classes(getDay(), getTime(), 1);
+		count_classes(day, time, semester);
 
 		Log.i("marker", String.valueOf(LOV));
 		Log.i("marker", String.valueOf(HCB));
+		Log.i("marker", String.valueOf(CAR));
+		Log.i("marker", String.valueOf(FLH));
+		Log.i("marker", String.valueOf(OSB));
+		Log.i("marker", String.valueOf(BEL));
+		Log.i("marker", String.valueOf(HWC));
+		Log.i("marker", String.valueOf(LSB));
+		Log.i("marker", String.valueOf(RBA));
+		Log.i("marker", String.valueOf(RBB));
+		Log.i("marker", String.valueOf(MCH));
 
-		float classpercent_lov, classpercent_hcb;
 
-		classpercent_lov = (float) LOV / loveCap;
-		classpercent_hcb = (float) HCB / hcbCap;
-		if (classpercent_lov == 0) {
+		if (LOV == 0) {
 			mo_lov = new MarkerOptions()
 					.title("Love Building")
 					.position(love)
@@ -828,34 +843,52 @@ public class MainActivity extends Activity {
 					.visible(false).draggable(false);
 		}
 
-		else if (classpercent_lov <= .5 && classpercent_lov > 0) {
+		else if (LOV > 0 && LOV <= 10) {
 			mo_lov = new MarkerOptions()
 					.title("Love Building")
 					.position(love)
 					.icon(BitmapDescriptorFactory
-							.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+							.fromResource(R.drawable.circle_blue))
 					.visible(true).draggable(false);
 		}
 
-		else if (classpercent_lov > .5 && classpercent_lov <= .75) {
+		else if (LOV > 10 && LOV <= 20) {
 			mo_lov = new MarkerOptions()
 					.title("Love Building")
 					.position(love)
 					.icon(BitmapDescriptorFactory
-							.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
+							.fromResource(R.drawable.circle_geen))
 					.visible(true).draggable(false);
 		}
 
-		else if (classpercent_lov > .75) {
+		else if (LOV > 20 && LOV <= 30) {
 			mo_lov = new MarkerOptions()
 					.title("Love Building")
 					.position(love)
 					.icon(BitmapDescriptorFactory
-							.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+							.fromResource(R.drawable.circle_yellow))
 					.visible(true).draggable(false);
 		}
 
-		if (classpercent_hcb == 0) {
+		else if (LOV > 30 && LOV <= 40) {
+			mo_lov = new MarkerOptions()
+					.title("Love Building")
+					.position(love)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_orange))
+					.visible(true).draggable(false);
+		}
+
+		else if (LOV > 40) {
+			mo_lov = new MarkerOptions()
+					.title("Love Building")
+					.position(love)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_red))
+					.visible(true).draggable(false);
+		}
+
+		if (HCB == 0) {
 			mo_hcb = new MarkerOptions()
 					.title("HCB")
 					.position(hcb)
@@ -864,55 +897,610 @@ public class MainActivity extends Activity {
 					.visible(false).draggable(false);
 		}
 
-		else if (classpercent_hcb <= .5 && classpercent_hcb > 0) {
+		else if (HCB > 0 && HCB <= 10) {
 			mo_hcb = new MarkerOptions()
 					.title("HCB")
 					.position(hcb)
 					.icon(BitmapDescriptorFactory
-							.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+							.fromResource(R.drawable.circle_blue))
 					.visible(true).draggable(false);
 		}
 
-		else if (classpercent_hcb > .5 && classpercent_hcb <= .75) {
+		else if (HCB > 10 && HCB <= 20) {
 			mo_hcb = new MarkerOptions()
 					.title("HCB")
 					.position(hcb)
 					.icon(BitmapDescriptorFactory
-							.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
+							.fromResource(R.drawable.circle_geen))
 					.visible(true).draggable(false);
 		}
 
-		else if (classpercent_hcb > .75) {
+		else if (HCB > 20 && HCB <= 30) {
 			mo_hcb = new MarkerOptions()
 					.title("HCB")
 					.position(hcb)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_yellow))
+					.visible(true).draggable(false);
+		}
+		
+		else if (HCB > 30 && HCB <= 40) {
+			mo_hcb = new MarkerOptions()
+					.title("HCB")
+					.position(hcb)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_orange))
+					.visible(true).draggable(false);
+		}
+
+		else if (HCB > 40) {
+			mo_hcb = new MarkerOptions()
+					.title("HCB")
+					.position(hcb)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_red))
+					.visible(true).draggable(false);
+		}
+		
+		if (MCH == 0) {
+			mo_caroth = new MarkerOptions()
+					.title("Corothers")
+					.position(caroth)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_orange))
+					.visible(false).draggable(false);
+		}
+
+		else if (MCH > 0 && MCH <= 10) {
+			mo_caroth = new MarkerOptions()
+					.title("Corothers")
+					.position(caroth)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_blue))
+					.visible(true).draggable(false);
+		}
+
+		else if (MCH > 10 && MCH <= 20) {
+			mo_caroth = new MarkerOptions()
+					.title("Corothers")
+					.position(caroth)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_geen))
+					.visible(true).draggable(false);
+		}
+
+		else if (MCH > 20 && MCH <= 30) {
+			mo_caroth = new MarkerOptions()
+					.title("Corothers")
+					.position(caroth)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_yellow))
+					.visible(true).draggable(false);
+		}
+		
+		else if (MCH > 30 && MCH <= 40) {
+			mo_caroth = new MarkerOptions()
+					.title("Corothers")
+					.position(caroth)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_orange))
+					.visible(true).draggable(false);
+		}
+		
+		else if (MCH > 40) {
+			mo_caroth = new MarkerOptions()
+					.title("Corothers")
+					.position(caroth)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_red))
+					.visible(true).draggable(false);
+		}
+
+		if (CAR == 0) {
+			mo_carr = new MarkerOptions()
+					.title("Carraway")
+					.position(carr)
 					.icon(BitmapDescriptorFactory
 							.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+					.visible(false).draggable(false);
+		}
+
+		else if (CAR > 0 && CAR <= 10) {
+			mo_carr = new MarkerOptions()
+					.title("Carraway")
+					.position(carr)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_blue))
 					.visible(true).draggable(false);
 		}
 
+		else if (CAR > 10 && CAR <= 20) {
+			mo_carr = new MarkerOptions()
+					.title("Carraway")
+					.position(carr)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_geen))
+					.visible(true).draggable(false);
+		}
+
+		else if (CAR > 20 && CAR <= 30) {
+			mo_carr = new MarkerOptions()
+					.title("Carraway")
+					.position(carr)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_yellow))
+					.visible(true).draggable(false);
+		}
+		
+		else if (CAR > 30 && CAR <= 40) {
+			mo_carr = new MarkerOptions()
+					.title("Carraway")
+					.position(carr)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_orange))
+					.visible(true).draggable(false);
+		}
+		
+		else if (CAR >  40) {
+			mo_carr = new MarkerOptions()
+					.title("Carraway")
+					.position(carr)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_red))
+					.visible(true).draggable(false);
+		}
+
+		if (BEL == 0) {
+			mo_bel = new MarkerOptions()
+					.title("Bellamy")
+					.position(bel)
+					.icon(BitmapDescriptorFactory
+							.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+					.visible(false).draggable(false);
+		}
+
+		else if (BEL > 0 && BEL <= 10) {
+			mo_bel = new MarkerOptions()
+					.title("Bellamy")
+					.position(bel)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_blue))
+					.visible(true).draggable(false);
+		}
+
+		else if (BEL > 10 && BEL <= 20) {
+			mo_bel = new MarkerOptions()
+					.title("Bellamy")
+					.position(bel)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_geen))
+					.visible(true).draggable(false);
+		}
+
+		else if (BEL > 20 && BEL <= 30) {
+			mo_bel = new MarkerOptions()
+					.title("Bellamy")
+					.position(bel)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_yellow))
+					.visible(true).draggable(false);
+		}
+		
+		else if (BEL > 30 && BEL <= 40) {
+			mo_bel = new MarkerOptions()
+					.title("Bellamy")
+					.position(bel)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_orange))
+					.visible(true).draggable(false);
+		}
+		
+		else if (BEL > 40) {
+			mo_bel = new MarkerOptions()
+					.title("Bellamy")
+					.position(bel)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_red))
+					.visible(true).draggable(false);
+		}
+
+		if (RBA == 0) {
+			mo_rova = new MarkerOptions()
+					.title("Rovetta A")
+					.position(rova)
+					.icon(BitmapDescriptorFactory
+							.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+					.visible(false).draggable(false);
+		}
+
+		else if (RBA > 0 && RBA <= 10) {
+			mo_rova = new MarkerOptions()
+					.title("Rovetta A")
+					.position(rova)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_blue))
+					.visible(true).draggable(false);
+		}
+
+		else if (RBA > 10 && RBA <= 20) {
+			mo_rova = new MarkerOptions()
+					.title("Rovetta A")
+					.position(rova)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_geen))
+					.visible(true).draggable(false);
+		}
+
+		else if (RBA > 20 && RBA <= 30) {
+			mo_rova = new MarkerOptions()
+					.title("Rovetta A")
+					.position(rova)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_yellow))
+					.visible(true).draggable(false);
+		}
+		
+		else if (RBA > 30 && RBA <= 40) {
+			mo_rova = new MarkerOptions()
+					.title("Rovetta A")
+					.position(rova)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_orange))
+					.visible(true).draggable(false);
+		}
+		
+		else if (RBA > 40) {
+			mo_rova = new MarkerOptions()
+					.title("Rovetta A")
+					.position(rova)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_red))
+					.visible(true).draggable(false);
+		}
+
+		if (RBB == 0) {
+			mo_rovb = new MarkerOptions()
+					.title("Rovetta B")
+					.position(rovb)
+					.icon(BitmapDescriptorFactory
+							.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+					.visible(false).draggable(false);
+		}
+
+		else if (RBB > 0 && RBB <= 10) {
+			mo_rovb = new MarkerOptions()
+					.title("Rovetta B")
+					.position(rovb)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_blue))
+					.visible(true).draggable(false);
+		}
+
+		else if (RBB > 10 && RBB <= 20) {
+			mo_rovb = new MarkerOptions()
+					.title("Rovetta B")
+					.position(rovb)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_geen))
+					.visible(true).draggable(false);
+		}
+
+		else if (RBB > 20 && RBB <= 30) {
+			mo_rovb = new MarkerOptions()
+					.title("Rovetta B")
+					.position(rovb)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_yellow))
+					.visible(true).draggable(false);
+		}
+		
+		else if (RBB > 30 && RBB <= 40) {
+			mo_rovb = new MarkerOptions()
+					.title("Rovetta B")
+					.position(rovb)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_orange))
+					.visible(true).draggable(false);
+		}
+		
+		else if (RBB > 40) {
+			mo_rovb = new MarkerOptions()
+					.title("Rovetta B")
+					.position(rovb)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_red))
+					.visible(true).draggable(false);
+		}
+
+		if (FLH == 0) {
+			mo_fish = new MarkerOptions()
+					.title("Fisher")
+					.position(fish)
+					.icon(BitmapDescriptorFactory
+							.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+					.visible(false).draggable(false);
+		}
+
+		else if (FLH > 0 && FLH <= 10) {
+			mo_fish = new MarkerOptions()
+					.title("Fisher")
+					.position(fish)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_blue))
+					.visible(true).draggable(false);
+		}
+
+		else if (FLH > 10 && RBB <= 20) {
+			mo_fish = new MarkerOptions()
+					.title("Fisher")
+					.position(fish)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_geen))
+					.visible(true).draggable(false);
+		}
+
+		else if (FLH > 20 && FLH <= 30) {
+			mo_fish = new MarkerOptions()
+					.title("Fisher")
+					.position(fish)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_yellow))
+					.visible(true).draggable(false);
+		}
+		
+		else if (FLH > 30 && FLH <= 40) {
+			mo_fish = new MarkerOptions()
+					.title("Fisher")
+					.position(fish)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_orange))
+					.visible(true).draggable(false);
+		}
+		
+		else if (FLH > 40) {
+			mo_fish = new MarkerOptions()
+					.title("Fisher")
+					.position(fish)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_red))
+					.visible(true).draggable(false);
+		}
+
+		if (HWC == 0) {
+			mo_wel = new MarkerOptions()
+					.title("Health and Wellness Center")
+					.position(well)
+					.icon(BitmapDescriptorFactory
+							.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+					.visible(false).draggable(false);
+		}
+
+		else if (HWC > 0 && HWC <= 10) {
+			mo_wel = new MarkerOptions()
+					.title("Health and Wellness Center")
+					.position(well)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_blue))
+					.visible(true).draggable(false);
+		}
+
+		else if (HWC > 10 && HWC <= 20) {
+			mo_wel = new MarkerOptions()
+					.title("Health and Wellness Center")
+					.position(well)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_geen))
+					.visible(true).draggable(false);
+		}
+
+		else if (HWC > 20 && HWC <= 30) {
+			mo_wel = new MarkerOptions()
+					.title("Health and Wellness Center")
+					.position(well)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_yellow))
+					.visible(true).draggable(false);
+		}
+		
+		else if (HWC > 30 && HWC <= 40) {
+			mo_wel = new MarkerOptions()
+					.title("Health and Wellness Center")
+					.position(well)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_orange))
+					.visible(true).draggable(false);
+		}
+		
+		else if (HWC > 40) {
+			mo_wel = new MarkerOptions()
+					.title("Health and Wellness Center")
+					.position(well)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_red))
+					.visible(true).draggable(false);
+		}
+
+		if (LSB == 0) {
+			mo_shor = new MarkerOptions()
+					.title("Shores")
+					.position(shor)
+					.icon(BitmapDescriptorFactory
+							.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+					.visible(false).draggable(false);
+		}
+
+		else if (LSB > 0 && LSB <= 10) {
+			mo_shor = new MarkerOptions()
+					.title("Shores")
+					.position(shor)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_blue))
+					.visible(true).draggable(false);
+		}
+
+		else if (LSB > 10 && LSB <= 20) {
+			mo_shor = new MarkerOptions()
+					.title("Shores")
+					.position(shor)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_geen))
+					.visible(true).draggable(false);
+		}
+
+		else if (LSB > 20 && LSB <= 30) {
+			mo_shor = new MarkerOptions()
+					.title("Shores")
+					.position(shor)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_yellow))
+					.visible(true).draggable(false);
+		}
+		
+		else if (LSB > 30 && LSB <= 40) {
+			mo_shor = new MarkerOptions()
+					.title("Shores")
+					.position(shor)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_orange))
+					.visible(true).draggable(false);
+		}
+		
+		else if (LSB > 40) {
+			mo_shor = new MarkerOptions()
+					.title("Shores")
+					.position(shor)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_red))
+					.visible(true).draggable(false);
+		}
+		
+		if (OSB == 0) {
+			mo_osb = new MarkerOptions()
+					.title("OSB")
+					.position(osb)
+					.icon(BitmapDescriptorFactory
+							.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+					.visible(false).draggable(false);
+		}
+
+		else if (OSB > 0 && OSB <= 10) {
+			mo_osb = new MarkerOptions()
+					.title("OSB")
+					.position(osb)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_blue))
+					.visible(true).draggable(false);
+		}
+
+		else if (OSB > 10 && OSB <= 20) {
+			mo_osb = new MarkerOptions()
+					.title("OSB")
+					.position(osb)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_geen))
+					.visible(true).draggable(false);
+		}
+
+		else if (OSB > 20 && OSB <= 30) {
+			mo_osb = new MarkerOptions()
+					.title("OSB")
+					.position(osb)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_yellow))
+					.visible(true).draggable(false);
+		}
+
+		else if (OSB > 30 && OSB <= 40) {
+			mo_osb = new MarkerOptions()
+					.title("OSB")
+					.position(osb)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_orange))
+					.visible(true).draggable(false);
+		}
+		
+		else if (OSB > 40) {
+			mo_osb = new MarkerOptions()
+					.title("OSB")
+					.position(osb)
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.circle_red))
+					.visible(true).draggable(false);
+		}
+		
+		
+		
 		map.addMarker(mo_lov);
 		map.addMarker(mo_hcb);
+		map.addMarker(mo_carr);
+		map.addMarker(mo_caroth);
+		map.addMarker(mo_rova);
+		map.addMarker(mo_rovb);
+		map.addMarker(mo_bel);
+		map.addMarker(mo_wel);
+		map.addMarker(mo_shor);
+		map.addMarker(mo_fish);
+		map.addMarker(mo_osb);
 
 		map.setOnMarkerClickListener(new OnMarkerClickListener() {
 
 			@Override
 			public boolean onMarkerClick(Marker marker) {
-				Log.i("marker", "here");
 				if (marker.getTitle().toString()
 						.equals(mo_hcb.getTitle().toString())) {
-					marker.setSnippet("Capacity: " + String.valueOf(hcbCap)
-							+ "\nIn-Use: " + String.valueOf(HCB) + "\nEmpty: "
-							+ String.valueOf(hcbCap - HCB));
+					marker.setSnippet("In-Use: " + String.valueOf(HCB));
 				}
 
 				if (marker.getTitle().toString()
 						.equals(mo_lov.getTitle().toString())) {
-					Log.i("marker", "here");
-					marker.setSnippet("Capacity: " + String.valueOf(loveCap)
-							+ "\nIn-Use: " + String.valueOf(LOV) + "\nEmpty: "
-							+ String.valueOf(loveCap - LOV));
+					marker.setSnippet("In-Use: " + String.valueOf(LOV));
 				}
+				
+				if (marker.getTitle().toString()
+						.equals(mo_caroth.getTitle().toString())) {
+					marker.setSnippet("In-Use: " + String.valueOf(MCH));
+				}
+
+				if (marker.getTitle().toString()
+						.equals(mo_carr.getTitle().toString())) {
+					marker.setSnippet("In-Use: " + String.valueOf(CAR));
+				}
+				
+				if (marker.getTitle().toString()
+						.equals(mo_rova.getTitle().toString())) {
+					marker.setSnippet("In-Use: " + String.valueOf(RBA));
+				}
+
+				if (marker.getTitle().toString()
+						.equals(mo_rovb.getTitle().toString())) {
+					marker.setSnippet("In-Use: " + String.valueOf(RBB));
+				}
+				
+				if (marker.getTitle().toString()
+						.equals(mo_bel.getTitle().toString())) {
+					marker.setSnippet("In-Use: " + String.valueOf(BEL));
+				}
+
+				if (marker.getTitle().toString()
+						.equals(mo_shor.getTitle().toString())) {
+					marker.setSnippet("In-Use: " + String.valueOf(LSB));
+				}
+				
+				if (marker.getTitle().toString()
+						.equals(mo_wel.getTitle().toString())) {
+					marker.setSnippet("In-Use: " + String.valueOf(HWC));
+				}
+
+				if (marker.getTitle().toString()
+						.equals(mo_osb.getTitle().toString())) {
+					marker.setSnippet("In-Use: " + String.valueOf(OSB));
+				}
+				
+				if (marker.getTitle().toString()
+						.equals(mo_fish.getTitle().toString())) {
+					marker.setSnippet("In-Use: " + String.valueOf(FLH));
+				}
+				
 
 				return false;
 			}
