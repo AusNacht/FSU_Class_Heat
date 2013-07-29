@@ -30,6 +30,7 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -1442,6 +1443,15 @@ public class MainActivity extends Activity {
 		map.addMarker(mo_shor);
 		map.addMarker(mo_fish);
 		map.addMarker(mo_osb);
+		
+		map.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
+			
+			@Override
+			public void onInfoWindowClick(Marker marker) {
+				marker.hideInfoWindow();
+				
+			}
+		});
 
 		map.setOnMarkerClickListener(new OnMarkerClickListener() {
 
@@ -1502,7 +1512,6 @@ public class MainActivity extends Activity {
 					marker.setSnippet("In-Use: " + String.valueOf(FLH));
 				}
 				
-
 				return false;
 			}
 		});
