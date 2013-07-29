@@ -1,23 +1,28 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
+     <item 
+        android:id="@+id/dividerBar"
+        android:showAsAction="always"
+        android:orderInCategory="1"
+        android:enabled="false" />
+    
     <item 
         android:id="@+id/menuCurrent"
         android:showAsAction="always"
         android:title="Current"
-        android:orderInCategory="1" />
+        android:orderInCategory="2" />
     
     <item
         android:id="@+id/menuSem"
         android:actionViewClass="android.widget.Spinner"
         android:showAsAction="always"
-        android:orderInCategory="2" />
+        android:orderInCategory="3" />
     <item
         android:id="@+id/menuDay"
         android:actionViewClass="android.widget.Spinner"
         android:showAsAction="always"
-        android:orderInCategory="3" />
-  
-
+        android:orderInCategory="4" />
+    
 </menu>
 
   <!-- 

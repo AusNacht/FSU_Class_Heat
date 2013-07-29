@@ -86,11 +86,17 @@ public class MainActivity extends Activity {
 	int semesterSelection = SPRING;
 	int hourSelection = 0;
 	int minuteSelection = 0;
-	int amPmSelection = 0; //0 is am, 1 is pm
+	int amPmSelection = 0; // 0 is am, 1 is pm
 
 	// Actionbar spinners
-	private MenuItem mSpinnerItem1 = null;
-	private MenuItem mSpinnerItem2 = null;
+	private MenuItem spinnerSemester = null;
+	private MenuItem spinnerDay = null;
+	Spinner spinner1;
+	Spinner spinner2;
+
+	// Seekbar
+	SeekBar seekBar;
+	TextView textViewTime;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -101,22 +107,30 @@ public class MainActivity extends Activity {
 		getActionBar().setDisplayShowTitleEnabled(false);
 		// end set action bar
 
-		SeekBar seekBar = (SeekBar) findViewById(R.id.seekBar1);
-		final TextView textView = (TextView) findViewById(R.id.textView1);
-		textView.setText("" + "12" + ":" + "00" + " AM");
+		// set up seekbar
+		seekBar = (SeekBar) findViewById(R.id.seekBar1);
+		textViewTime = (TextView) findViewById(R.id.textView1);
+		textViewTime.setText("" + "12" + ":" + "00" + " AM");
 		seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
 			public void onStopTrackingTouch(SeekBar bar) {
 				int value = bar.getProgress(); // the value of the seekBar
 												// progress
-				if(amPmSelection ==0)
-				Toast.makeText(getApplicationContext(), String.format("%02d", hourSelection) + ":" + String.format("%02d", minuteSelection) + " AM",
-						Toast.LENGTH_SHORT).show();
-				else 
-					Toast.makeText(getApplicationContext(), String.format("%02d", hourSelection) + ":" + String.format("%02d", minuteSelection) + " PM",
-							Toast.LENGTH_SHORT).show();
-				
-				//delete toast and run query on time
+
+				if (amPmSelection == 0)
+					Toast.makeText(
+							getApplicationContext(),
+							String.format("%02d", hourSelection) + ":"
+									+ String.format("%02d", minuteSelection)
+									+ " AM", Toast.LENGTH_SHORT).show();
+				else
+					Toast.makeText(
+							getApplicationContext(),
+							String.format("%02d", hourSelection) + ":"
+									+ String.format("%02d", minuteSelection)
+									+ " PM", Toast.LENGTH_SHORT).show();
+
+				// delete toast and run query on time
 			}
 
 			public void onStartTrackingTouch(SeekBar bar) {
@@ -125,27 +139,38 @@ public class MainActivity extends Activity {
 
 			public void onProgressChanged(SeekBar bar, int paramInt,
 					boolean paramBoolean) {
-				if(paramInt == 100) 
-					paramInt = 99;//handle the wraparound
+				if (paramInt == 100)
+					paramInt = 99;// handle the wraparound
 				int numMinutes = (paramInt * (24 * 60)) / 100;
 				int numHours = numMinutes / 60;
 				int amOrPm = numHours / 12;
-				numMinutes = ((numMinutes % 60) / 15)*15;
-				if(numHours == 0 || numHours == 12)
+				numMinutes = ((numMinutes % 60) / 15) * 15;
+				if (numHours == 0 || numHours == 12)
 					numHours = 12;
 				else
-					numHours = numHours%12;
+					numHours = numHours % 12;
 				hourSelection = numHours;
 				minuteSelection = numMinutes;
 				amPmSelection = amOrPm;
 
-				if (amOrPm == 0)
-					textView.setText("" + String.format("%02d", numHours) + ":" + String.format("%02d", numMinutes) + " AM");
-				else
-					textView.setText("" + String.format("%02d", numHours) + ":" + String.format("%02d", numMinutes) + " PM");
-				
+				if (amPmSelection == 0) {
+
+					Log.i("current", "numMinutes = " + numMinutes);
+
+					textViewTime.setText(""
+							+ String.format("%02d", hourSelection) + ":"
+							+ String.format("%02d", minuteSelection) + " AM");
+				} else {
+
+					Log.i("current", "set up");
+
+					textViewTime.setText(""
+							+ String.format("%02d", hourSelection) + ":"
+							+ String.format("%02d", minuteSelection) + " PM");
+				}
+
 			}
-		});
+		}); // end set up seekbar
 
 		// get the map fragment
 		map = ((MapFragment) getFragmentManager()
@@ -337,10 +362,12 @@ public class MainActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		MenuInflater mi = getMenuInflater();
 		mi.inflate(R.menu.main, menu);
-		mSpinnerItem1 = menu.findItem(R.id.menuSem);
-		View view1 = mSpinnerItem1.getActionView();
+
+		// Semester Spinner
+		spinnerSemester = menu.findItem(R.id.menuSem);
+		View view1 = spinnerSemester.getActionView();
 		if (view1 instanceof Spinner) {
-			final Spinner spinner1 = (Spinner) view1;
+			spinner1 = (Spinner) view1;
 			ArrayAdapter<CharSequence> adapter = ArrayAdapter
 					.createFromResource(new ContextThemeWrapper(this,
 							android.R.style.Theme_Holo), R.array.sem_options,
@@ -375,12 +402,13 @@ public class MainActivity extends Activity {
 				}
 			});
 
-		}
+		}// end Semester Spinner
 
-		mSpinnerItem2 = menu.findItem(R.id.menuDay);
-		View view2 = mSpinnerItem2.getActionView();
+		// Day Spinner
+		spinnerDay = menu.findItem(R.id.menuDay);
+		View view2 = spinnerDay.getActionView();
 		if (view2 instanceof Spinner) {
-			final Spinner spinner2 = (Spinner) view2;
+			spinner2 = (Spinner) view2;
 			ArrayAdapter<CharSequence> adapter = ArrayAdapter
 					.createFromResource(new ContextThemeWrapper(this,
 							android.R.style.Theme_Holo), R.array.day_options,
@@ -421,7 +449,96 @@ public class MainActivity extends Activity {
 				}
 			});
 
+		}// end Day Spinner
+		return true;
+	}// end options menu
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.menuCurrent:
+			setCurrent();
+			return true;
+
+		default:
+			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	public boolean setCurrent() {
+		int time = getTime();
+		char day = getDay();
+		int seekProgress = 0;
+
+		if (day == 'M') {
+			spinner2.setSelection(MONDAY);
+			daySelection = MONDAY;
+		} else if (day == 'T') {
+			spinner2.setSelection(TUESDAY);
+			daySelection = TUESDAY;
+		} else if (day == 'W') {
+			spinner2.setSelection(WEDNESDAY);
+			daySelection = WEDNESDAY;
+		} else if (day == 'R') {
+			spinner2.setSelection(THURSDAY);
+			daySelection = THURSDAY;
+		} else if (day == 'F') {
+			spinner2.setSelection(FRIDAY);
+			daySelection = FRIDAY;
+		}
+
+		Time currentTime = new Time();
+		currentTime.setToNow();
+		int monthInt = currentTime.month + 1;
+		int dateInt = currentTime.monthDay;
+
+		if (monthInt <= 5) {
+			semesterSelection = SPRING;
+			spinner1.setSelection(SPRING);
+		} else if (monthInt == 6 || monthInt == 7
+				|| (monthInt == 8 && dateInt < 15)) {
+			semesterSelection = SUMMER;
+			spinner1.setSelection(SUMMER);
+		} else {
+			semesterSelection = FALL;
+			spinner1.setSelection(FALL);
+		}
+		amPmSelection = time / 1200;
+		hourSelection = time / 100;
+		hourSelection %= 12;
+		if (hourSelection == 0)
+			hourSelection = 12;
+		minuteSelection = ((time % 100) / 15) * 15; // round to nearest 15
+
+		Log.i("current", "time = " + time);
+		Log.i("current", "minuteSelection = " + minuteSelection);
+		Log.i("current",
+				"String.format = " + String.format("%02d", minuteSelection));
+
+			/*
+		 * if ((time % 100 % 15 / 7) > 0) minuteSelection += 15;
+		 * 
+		 * if (minuteSelection == 60) {// correct rounding minuteSelection = 0;
+		 * hourSelection += 1;
+		 * 
+		 * if (hourSelection == 12) { if (amPmSelection == 1) amPmSelection = 0;
+		 * else amPmSelection = 1; } else if (hourSelection == 13) {
+		 * hourSelection = 1; } }// end correct rounding
+		 */
+		
+		seekProgress = (((((hourSelection % 12) + (amPmSelection * 12)) * 60) + minuteSelection + 15) * 100)
+				/ (24 * 60);
+
+		if (amPmSelection == 0) {
+			textViewTime.setText("" + String.format("%02d", hourSelection)
+					+ ":" + String.format("%02d", minuteSelection) + " AM");
+		} else {
+			textViewTime.setText("" + String.format("%02d", hourSelection)
+					+ ":" + String.format("%02d", minuteSelection) + " PM");
+		}
+
+		seekBar.setProgress(seekProgress);
+
 		return true;
 	}
 
@@ -456,6 +573,8 @@ public class MainActivity extends Activity {
 			daychar = 'R';
 		} else if (dayint == 5) {
 			daychar = 'F';
+		} else {
+			daychar = 'M';
 		}
 
 		return daychar;
