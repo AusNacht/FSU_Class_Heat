@@ -186,7 +186,7 @@ public class MainActivity extends Activity {
 		map.animateCamera(zoom);
 		// end set up map fragment
 
-		//marker('M');
+		marker('T', 1000, 1);
 	}// end onCreate
 
 	@Override
@@ -750,6 +750,7 @@ public class MainActivity extends Activity {
 	public void marker(char day, int time, int semester)
 	{
 
+		map.clear();
 		// ***** Database Portion *****
 		mCursor = getContentResolver().query(class_database.CONTENT_URI, null,
 				null, null, null);
