@@ -186,175 +186,7 @@ public class MainActivity extends Activity {
 		map.animateCamera(zoom);
 		// end set up map fragment
 
-		// ***** Database Portion *****
-		mCursor = getContentResolver().query(class_database.CONTENT_URI, null,
-				null, null, null);
-
-		if (mCursor != null) {
-
-			// if contentprovider is empty, load the dataset into content
-			// provider
-			// if contentprovider is not empty, there is no need to import the
-			// dataset
-			if (mCursor.getCount() <= 0) {
-				Uri mNewUri;
-				ContentValues mNewValues = new ContentValues();
-
-				// Retrieve dataset textfile in res/raw/class_dataset.txt
-				InputStream inputStream = this.getResources().openRawResource(
-						R.raw.class_dataset);
-				InputStreamReader inputreader = new InputStreamReader(
-						inputStream);
-				BufferedReader buffreader = new BufferedReader(inputreader);
-
-				String line;
-
-				// Iterate each line of the dataset file
-				// Split each line into tokens and load into the database
-				try {
-					while ((line = buffreader.readLine()) != null) {
-						StringTokenizer line_tokens = new StringTokenizer(line,
-								",");
-
-						mNewValues.put(class_database.COLUMN_BUILDING,
-								line_tokens.nextToken());
-						mNewValues.put(class_database.COLUMN_DAYS,
-								line_tokens.nextToken());
-						mNewValues.put(class_database.COLUMN_BEGIN,
-								line_tokens.nextToken());
-						mNewValues.put(class_database.COLUMN_END,
-								line_tokens.nextToken());
-						mNewValues.put(class_database.COLUMN_SEMESTER,
-								line_tokens.nextToken());
-						mNewUri = getContentResolver().insert(
-								class_database.CONTENT_URI, mNewValues);
-					}
-				} catch (IOException e) {
-
-				}
-
-				// Reinitialize database cursor
-				mCursor = getContentResolver().query(
-						class_database.CONTENT_URI, null, null, null, null);
-			}
-		}
-		mCursor.close();
-
-		// ***** End of Database Portion *****
-
-		LatLng love = new LatLng(30.446112, -84.299566);
-		LatLng hcb = new LatLng(30.443291, -84.297034);
-
-		// count_classes(getDay(), getTime());
-		count_classes('M', 1303, 0);
-
-		Log.i("marker", String.valueOf(LOV));
-		Log.i("marker", String.valueOf(HCB));
-
-		float classpercent_lov, classpercent_hcb;
-
-		classpercent_lov = (float) LOV / loveCap;
-		classpercent_hcb = (float) HCB / hcbCap;
-		if (classpercent_lov == 0) {
-			mo_lov = new MarkerOptions()
-					.title("Love Building")
-					.position(love)
-					.icon(BitmapDescriptorFactory
-							.defaultMarker(BitmapDescriptorFactory.HUE_RED))
-					.visible(false).draggable(false);
-		}
-
-		else if (classpercent_lov <= .5 && classpercent_lov > 0) {
-			mo_lov = new MarkerOptions()
-					.title("Love Building")
-					.position(love)
-					.icon(BitmapDescriptorFactory
-							.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-					.visible(true).draggable(false);
-		}
-
-		else if (classpercent_lov > .5 && classpercent_lov <= .75) {
-			mo_lov = new MarkerOptions()
-					.title("Love Building")
-					.position(love)
-					.icon(BitmapDescriptorFactory
-							.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
-					.visible(true).draggable(false);
-		}
-
-		else if (classpercent_lov > .75) {
-			mo_lov = new MarkerOptions()
-					.title("Love Building")
-					.position(love)
-					.icon(BitmapDescriptorFactory
-							.defaultMarker(BitmapDescriptorFactory.HUE_RED))
-					.visible(true).draggable(false);
-		}
-
-		if (classpercent_hcb == 0) {
-			mo_hcb = new MarkerOptions()
-					.title("HCB")
-					.position(hcb)
-					.icon(BitmapDescriptorFactory
-							.defaultMarker(BitmapDescriptorFactory.HUE_RED))
-					.visible(false).draggable(false);
-		}
-
-		else if (classpercent_hcb <= .5 && classpercent_hcb > 0) {
-			mo_hcb = new MarkerOptions()
-					.title("HCB")
-					.position(hcb)
-					.icon(BitmapDescriptorFactory
-							.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-					.visible(true).draggable(false);
-		}
-
-		else if (classpercent_hcb > .5 && classpercent_hcb <= .75) {
-			mo_hcb = new MarkerOptions()
-					.title("HCB")
-					.position(hcb)
-					.icon(BitmapDescriptorFactory
-							.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
-					.visible(true).draggable(false);
-		}
-
-		else if (classpercent_hcb > .75) {
-			mo_hcb = new MarkerOptions()
-					.title("HCB")
-					.position(hcb)
-					.icon(BitmapDescriptorFactory
-							.defaultMarker(BitmapDescriptorFactory.HUE_RED))
-					.visible(true).draggable(false);
-		}
-
-		map.addMarker(mo_lov);
-		map.addMarker(mo_hcb);
-
-		map.setOnMarkerClickListener(new OnMarkerClickListener() {
-
-			@Override
-			public boolean onMarkerClick(Marker marker) {
-				Log.i("marker", "here");
-				if (marker.getTitle().toString()
-						.equals(mo_hcb.getTitle().toString())) {
-					marker.setSnippet("Capacity: " + String.valueOf(hcbCap)
-							+ "\nIn-Use: " + String.valueOf(HCB) + "\nEmpty: "
-							+ String.valueOf(hcbCap - HCB));
-				}
-
-				if (marker.getTitle().toString()
-						.equals(mo_lov.getTitle().toString())) {
-					Log.i("marker", "here");
-					marker.setSnippet("Capacity: " + String.valueOf(loveCap)
-							+ "\nIn-Use: " + String.valueOf(LOV) + "\nEmpty: "
-							+ String.valueOf(loveCap - LOV));
-				}
-
-				return false;
-			}
-		});
-
-		LatLng dot = dotlocation(lovebc);
+		marker();
 	}// end onCreate
 
 	@Override
@@ -538,6 +370,7 @@ public class MainActivity extends Activity {
 		}
 
 		seekBar.setProgress(seekProgress);
+		marker();
 
 		return true;
 	}
@@ -913,4 +746,177 @@ public class MainActivity extends Activity {
 			// break;
 		}
 	}
+	
+	public void marker()
+	{
+
+		// ***** Database Portion *****
+		mCursor = getContentResolver().query(class_database.CONTENT_URI, null,
+				null, null, null);
+
+		if (mCursor != null) {
+
+			// if contentprovider is empty, load the dataset into content
+			// provider
+			// if contentprovider is not empty, there is no need to import the
+			// dataset
+			if (mCursor.getCount() <= 0) {
+				Uri mNewUri;
+				ContentValues mNewValues = new ContentValues();
+
+				// Retrieve dataset textfile in res/raw/class_dataset.txt
+				InputStream inputStream = this.getResources().openRawResource(
+						R.raw.class_dataset);
+				InputStreamReader inputreader = new InputStreamReader(
+						inputStream);
+				BufferedReader buffreader = new BufferedReader(inputreader);
+
+				String line;
+
+				// Iterate each line of the dataset file
+				// Split each line into tokens and load into the database
+				try {
+					while ((line = buffreader.readLine()) != null) {
+						StringTokenizer line_tokens = new StringTokenizer(line,
+								",");
+
+						mNewValues.put(class_database.COLUMN_BUILDING,
+								line_tokens.nextToken());
+						mNewValues.put(class_database.COLUMN_DAYS,
+								line_tokens.nextToken());
+						mNewValues.put(class_database.COLUMN_BEGIN,
+								line_tokens.nextToken());
+						mNewValues.put(class_database.COLUMN_END,
+								line_tokens.nextToken());
+						mNewValues.put(class_database.COLUMN_SEMESTER,
+								line_tokens.nextToken());
+						mNewUri = getContentResolver().insert(
+								class_database.CONTENT_URI, mNewValues);
+					}
+				} catch (IOException e) {
+
+				}
+
+				// Reinitialize database cursor
+				mCursor = getContentResolver().query(
+						class_database.CONTENT_URI, null, null, null, null);
+			}
+		}
+		mCursor.close();
+
+		// ***** End of Database Portion *****
+
+		LatLng love = new LatLng(30.446112, -84.299566);
+		LatLng hcb = new LatLng(30.443291, -84.297034);
+
+		// count_classes(getDay(), getTime());
+		count_classes(getDay(), getTime(), 1);
+
+		Log.i("marker", String.valueOf(LOV));
+		Log.i("marker", String.valueOf(HCB));
+
+		float classpercent_lov, classpercent_hcb;
+
+		classpercent_lov = (float) LOV / loveCap;
+		classpercent_hcb = (float) HCB / hcbCap;
+		if (classpercent_lov == 0) {
+			mo_lov = new MarkerOptions()
+					.title("Love Building")
+					.position(love)
+					.icon(BitmapDescriptorFactory
+							.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+					.visible(false).draggable(false);
+		}
+
+		else if (classpercent_lov <= .5 && classpercent_lov > 0) {
+			mo_lov = new MarkerOptions()
+					.title("Love Building")
+					.position(love)
+					.icon(BitmapDescriptorFactory
+							.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+					.visible(true).draggable(false);
+		}
+
+		else if (classpercent_lov > .5 && classpercent_lov <= .75) {
+			mo_lov = new MarkerOptions()
+					.title("Love Building")
+					.position(love)
+					.icon(BitmapDescriptorFactory
+							.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
+					.visible(true).draggable(false);
+		}
+
+		else if (classpercent_lov > .75) {
+			mo_lov = new MarkerOptions()
+					.title("Love Building")
+					.position(love)
+					.icon(BitmapDescriptorFactory
+							.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+					.visible(true).draggable(false);
+		}
+
+		if (classpercent_hcb == 0) {
+			mo_hcb = new MarkerOptions()
+					.title("HCB")
+					.position(hcb)
+					.icon(BitmapDescriptorFactory
+							.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+					.visible(false).draggable(false);
+		}
+
+		else if (classpercent_hcb <= .5 && classpercent_hcb > 0) {
+			mo_hcb = new MarkerOptions()
+					.title("HCB")
+					.position(hcb)
+					.icon(BitmapDescriptorFactory
+							.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+					.visible(true).draggable(false);
+		}
+
+		else if (classpercent_hcb > .5 && classpercent_hcb <= .75) {
+			mo_hcb = new MarkerOptions()
+					.title("HCB")
+					.position(hcb)
+					.icon(BitmapDescriptorFactory
+							.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
+					.visible(true).draggable(false);
+		}
+
+		else if (classpercent_hcb > .75) {
+			mo_hcb = new MarkerOptions()
+					.title("HCB")
+					.position(hcb)
+					.icon(BitmapDescriptorFactory
+							.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+					.visible(true).draggable(false);
+		}
+
+		map.addMarker(mo_lov);
+		map.addMarker(mo_hcb);
+
+		map.setOnMarkerClickListener(new OnMarkerClickListener() {
+
+			@Override
+			public boolean onMarkerClick(Marker marker) {
+				Log.i("marker", "here");
+				if (marker.getTitle().toString()
+						.equals(mo_hcb.getTitle().toString())) {
+					marker.setSnippet("Capacity: " + String.valueOf(hcbCap)
+							+ "\nIn-Use: " + String.valueOf(HCB) + "\nEmpty: "
+							+ String.valueOf(hcbCap - HCB));
+				}
+
+				if (marker.getTitle().toString()
+						.equals(mo_lov.getTitle().toString())) {
+					Log.i("marker", "here");
+					marker.setSnippet("Capacity: " + String.valueOf(loveCap)
+							+ "\nIn-Use: " + String.valueOf(LOV) + "\nEmpty: "
+							+ String.valueOf(loveCap - LOV));
+				}
+
+				return false;
+			}
+		});
+	}
+	
 }
