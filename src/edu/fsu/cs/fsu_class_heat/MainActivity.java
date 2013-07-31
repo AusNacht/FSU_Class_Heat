@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
@@ -18,19 +19,21 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -41,8 +44,8 @@ public class MainActivity extends Activity {
 
 	Cursor mCursor;
 	GoogleMap map;
-	MarkerOptions mo_lov, mo_hcb,mo_caroth,mo_carr,mo_fish,mo_osb,mo_bel,mo_wel,mo_shor,mo_rova,mo_rovb;
-
+	MarkerOptions mo_lov, mo_hcb, mo_caroth, mo_carr, mo_fish, mo_osb, mo_bel,
+			mo_wel, mo_shor, mo_rova, mo_rovb;
 
 	// Integers to keep count of the number of class
 	int HCB = 0;
@@ -84,10 +87,14 @@ public class MainActivity extends Activity {
 
 	// user selection global variables
 	int daySelection = MONDAY;
+	char dayCharSelection = 'M';
 	int semesterSelection = SPRING;
 	int hourSelection = 0;
 	int minuteSelection = 0;
 	int amPmSelection = 0; // 0 is am, 1 is pm
+	int militaryTimeSelection = 0;
+	int seekSelection = 0;
+	int firstRun = 1;
 
 	// Actionbar spinners
 	private MenuItem spinnerSemester = null;
@@ -104,6 +111,21 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		if (savedInstanceState != null) {
+			daySelection = savedInstanceState.getInt("daySelection");
+			dayCharSelection = savedInstanceState.getChar("dayCharSelection");
+			semesterSelection = savedInstanceState.getInt("semesterSelection");
+			hourSelection = savedInstanceState.getInt("hourSelection");
+			minuteSelection = savedInstanceState.getInt("minuteSelection");
+			amPmSelection = savedInstanceState.getInt("amPmSelection");
+			militaryTimeSelection = savedInstanceState
+					.getInt("militaryTimeSelection");
+			seekSelection = savedInstanceState.getInt("seekSelection");
+			firstRun = savedInstanceState.getInt("firstRun");
+		}
+
+		Log.i("onCreate", "onCreate");
+
 		// set the actionbar
 		getActionBar().setDisplayShowTitleEnabled(false);
 		// end set action bar
@@ -113,25 +135,12 @@ public class MainActivity extends Activity {
 		textViewTime = (TextView) findViewById(R.id.textView1);
 		textViewTime.setText("" + "12" + ":" + "00" + " AM");
 		seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
 			public void onStopTrackingTouch(SeekBar bar) {
-				int value = bar.getProgress(); // the value of the seekBar
-												// progress
+				seekSelection = bar.getProgress(); // the value of the seekBar
+													// progress
 
-				if (amPmSelection == 0)
-					Toast.makeText(
-							getApplicationContext(),
-							String.format("%02d", hourSelection) + ":"
-									+ String.format("%02d", minuteSelection)
-									+ " AM", Toast.LENGTH_SHORT).show();
-				else
-					Toast.makeText(
-							getApplicationContext(),
-							String.format("%02d", hourSelection) + ":"
-									+ String.format("%02d", minuteSelection)
-									+ " PM", Toast.LENGTH_SHORT).show();
-
-				// delete toast and run query on time
+				marker(dayCharSelection, militaryTimeSelection,
+						semesterSelection);
 			}
 
 			public void onStartTrackingTouch(SeekBar bar) {
@@ -145,6 +154,8 @@ public class MainActivity extends Activity {
 				int numMinutes = (paramInt * (24 * 60)) / 100;
 				int numHours = numMinutes / 60;
 				int amOrPm = numHours / 12;
+				if(amOrPm > 1)
+					amOrPm = 1;
 				numMinutes = ((numMinutes % 60) / 15) * 15;
 				if (numHours == 0 || numHours == 12)
 					numHours = 12;
@@ -153,6 +164,18 @@ public class MainActivity extends Activity {
 				hourSelection = numHours;
 				minuteSelection = numMinutes;
 				amPmSelection = amOrPm;
+				seekSelection = paramInt;
+
+				if (hourSelection == 12 && amPmSelection == 0)
+					militaryTimeSelection = 0;
+				else if (hourSelection == 12)
+					militaryTimeSelection = hourSelection;
+				else
+					militaryTimeSelection = hourSelection + (amPmSelection * 12);
+				militaryTimeSelection = (militaryTimeSelection * 100)
+						+ minuteSelection;
+
+				Log.i("militaryTime", "militaryTime = " + militaryTimeSelection);
 
 				if (amPmSelection == 0) {
 
@@ -186,8 +209,6 @@ public class MainActivity extends Activity {
 		map.moveCamera(center);
 		map.animateCamera(zoom);
 		// end set up map fragment
-
-		marker('T', 1000, 1);
 	}// end onCreate
 
 	@Override
@@ -195,6 +216,8 @@ public class MainActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		MenuInflater mi = getMenuInflater();
 		mi.inflate(R.menu.main, menu);
+
+		Log.i("onCreate", "onCreateOptionsMenu");
 
 		// Semester Spinner
 		spinnerSemester = menu.findItem(R.id.menuSem);
@@ -227,6 +250,8 @@ public class MainActivity extends Activity {
 						break;
 					}
 
+					marker(dayCharSelection, militaryTimeSelection,
+							semesterSelection);
 				}
 
 				@Override
@@ -259,21 +284,28 @@ public class MainActivity extends Activity {
 					switch (arg2) {
 					case MONDAY:
 						daySelection = MONDAY;
+						dayCharSelection = 'M';
 						break;
 					case TUESDAY:
 						daySelection = TUESDAY;
+						dayCharSelection = 'T';
 						break;
 					case WEDNESDAY:
 						daySelection = WEDNESDAY;
+						dayCharSelection = 'W';
 						break;
 					case THURSDAY:
 						daySelection = THURSDAY;
+						dayCharSelection = 'R';
 						break;
 					case FRIDAY:
 						daySelection = FRIDAY;
+						dayCharSelection = 'F';
 						break;
 					}
 
+					marker(dayCharSelection, militaryTimeSelection,
+							semesterSelection);
 				}
 
 				@Override
@@ -283,6 +315,15 @@ public class MainActivity extends Activity {
 			});
 
 		}// end Day Spinner
+
+		Log.i("onCreate", "firstRun = " + firstRun);
+		if (firstRun == 1) {
+			setCurrent();
+			firstRun = 0;
+		} else {
+			rebuildAB();
+		}
+		marker(dayCharSelection, militaryTimeSelection, semesterSelection);
 		return true;
 	}// end options menu
 
@@ -291,34 +332,112 @@ public class MainActivity extends Activity {
 		switch (item.getItemId()) {
 		case R.id.menuCurrent:
 			setCurrent();
-			marker('M', 1303, 1);
+			marker(dayCharSelection, militaryTimeSelection, semesterSelection);
 			return true;
 
+		case R.id.menuKey:
+			//set up dialog
+            final Dialog dialog = new Dialog(this);
+            dialog.setContentView(R.layout.key_popup);
+            dialog.setTitle("Map Key");
+            dialog.setCancelable(true);
+            //there are a lot of settings, for dialog, check them all out!
+
+            //set up image view
+            ImageView img = (ImageView) dialog.findViewById(R.id.blueDotIV);
+            img.setImageResource(R.drawable.circle_blue);
+
+            //set up text
+            TextView text = (TextView) dialog.findViewById(R.id.blueDotTV);
+            text.setText("1-5");
+            
+          //set up image view
+            ImageView img2 = (ImageView) dialog.findViewById(R.id.greenDotIV);
+            img2.setImageResource(R.drawable.circle_geen);
+
+            //set up text
+            TextView text2 = (TextView) dialog.findViewById(R.id.greenDotTV);
+            text2.setText("6-10");
+            
+          //set up image view
+            ImageView img3 = (ImageView) dialog.findViewById(R.id.yellowDotIV);
+            img3.setImageResource(R.drawable.circle_yellow);
+
+            //set up text
+            TextView text3 = (TextView) dialog.findViewById(R.id.yellowDotTV);
+            text3.setText("11-15");
+            
+          //set up image view
+            ImageView img4 = (ImageView) dialog.findViewById(R.id.orangeDotIV);
+            img4.setImageResource(R.drawable.circle_orange);
+
+            //set up text
+            TextView text4 = (TextView) dialog.findViewById(R.id.orangeDotTV);
+            text4.setText("16-20");
+            
+          //set up image view
+            ImageView img5 = (ImageView) dialog.findViewById(R.id.redDotIV);
+            img5.setImageResource(R.drawable.circle_red);
+
+            //set up text
+            TextView text5 = (TextView) dialog.findViewById(R.id.redDotTV);
+            text5.setText("21-Up");
+            
+            //set up button
+            Button button = (Button) dialog.findViewById(R.id.Button01);
+            button.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+            //now that the dialog is set up, it's time to show it    
+            dialog.show();
+			return true;
+			
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
 
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		outState.putInt("daySelection", daySelection);
+		outState.putChar("dayCharSelection", dayCharSelection);
+		outState.putInt("semesterSelection", semesterSelection);
+		outState.putInt("hourSelection", hourSelection);
+		outState.putInt("minuteSelection", minuteSelection);
+		outState.putInt("amPmSelection", amPmSelection);
+		outState.putInt("militaryTimeSelection", militaryTimeSelection);
+		outState.putInt("seekSelection", seekSelection);
+		outState.putInt("firstRun", firstRun);
+	}
+
+	// sets globals to current time and returns seekbar progress
 	public boolean setCurrent() {
 		int time = getTime();
 		char day = getDay();
-		int seekProgress = 0;
+		seekSelection = 0;
 
 		if (day == 'M') {
 			spinner2.setSelection(MONDAY);
 			daySelection = MONDAY;
+			dayCharSelection = 'M';
 		} else if (day == 'T') {
 			spinner2.setSelection(TUESDAY);
 			daySelection = TUESDAY;
+			dayCharSelection = 'T';
 		} else if (day == 'W') {
 			spinner2.setSelection(WEDNESDAY);
 			daySelection = WEDNESDAY;
+			dayCharSelection = 'W';
 		} else if (day == 'R') {
 			spinner2.setSelection(THURSDAY);
 			daySelection = THURSDAY;
+			dayCharSelection = 'R';
 		} else if (day == 'F') {
 			spinner2.setSelection(FRIDAY);
 			daySelection = FRIDAY;
+			dayCharSelection = 'F';
 		}
 
 		Time currentTime = new Time();
@@ -337,41 +456,58 @@ public class MainActivity extends Activity {
 			semesterSelection = FALL;
 			spinner1.setSelection(FALL);
 		}
+		militaryTimeSelection = time / 100;
 		amPmSelection = time / 1200;
+		if(amPmSelection > 2)
+			amPmSelection = 1;
 		hourSelection = time / 100;
 		hourSelection %= 12;
 		if (hourSelection == 0)
 			hourSelection = 12;
 		minuteSelection = ((time % 100) / 15) * 15; // round to nearest 15
 
-		Log.i("current", "time = " + time);
-		Log.i("current", "minuteSelection = " + minuteSelection);
-		Log.i("current",
-				"String.format = " + String.format("%02d", minuteSelection));
+		militaryTimeSelection = (militaryTimeSelection * 100) + minuteSelection;
 
-			/*
-		 * if ((time % 100 % 15 / 7) > 0) minuteSelection += 15;
-		 * 
-		 * if (minuteSelection == 60) {// correct rounding minuteSelection = 0;
-		 * hourSelection += 1;
-		 * 
-		 * if (hourSelection == 12) { if (amPmSelection == 1) amPmSelection = 0;
-		 * else amPmSelection = 1; } else if (hourSelection == 13) {
-		 * hourSelection = 1; } }// end correct rounding
-		 */
-		
-		seekProgress = (((((hourSelection % 12) + (amPmSelection * 12)) * 60) + minuteSelection + 15) * 100)
+		Log.i("current", "time = " + time);
+		Log.i("current", "hourSelection = " + hourSelection);
+		Log.i("current", "minuteSelection = " + minuteSelection);
+		Log.i("current", "amPmSelection = " + amPmSelection);
+		Log.i("current", "military = " + militaryTimeSelection);
+
+		seekSelection = (((((hourSelection % 12) + (amPmSelection * 12)) * 60)
+				+ minuteSelection + 15) * 100)
 				/ (24 * 60);
 
-		if (amPmSelection == 0) {
-			textViewTime.setText("" + String.format("%02d", hourSelection)
-					+ ":" + String.format("%02d", minuteSelection) + " AM");
-		} else {
-			textViewTime.setText("" + String.format("%02d", hourSelection)
-					+ ":" + String.format("%02d", minuteSelection) + " PM");
+		seekBar.setProgress(seekSelection);
+
+		return true;
+	}
+
+	// rebuilds actionbar
+	public boolean rebuildAB() {
+		if (daySelection == MONDAY) {
+			spinner2.setSelection(MONDAY);
+		} else if (daySelection == TUESDAY) {
+			spinner2.setSelection(TUESDAY);
+		} else if (daySelection == WEDNESDAY) {
+			spinner2.setSelection(WEDNESDAY);
+		} else if (daySelection == THURSDAY) {
+			spinner2.setSelection(THURSDAY);
+		} else if (daySelection == FRIDAY) {
+			spinner2.setSelection(FRIDAY);
 		}
 
-		seekBar.setProgress(seekProgress);
+		if (semesterSelection == SPRING) {
+			spinner1.setSelection(SPRING);
+		} else if (semesterSelection == SUMMER) {
+			spinner1.setSelection(SUMMER);
+		} else {
+			spinner1.setSelection(FALL);
+		}
+
+		Log.i("onCreate", "rebuildAB");
+
+		seekBar.setProgress(seekSelection);
 
 		return true;
 	}
@@ -747,9 +883,8 @@ public class MainActivity extends Activity {
 			// break;
 		}
 	}
-	
-	public void marker(char day, int time, int semester)
-	{
+
+	public void marker(char day, int time, int semester) {
 
 		map.clear();
 		// ***** Database Portion *****
@@ -808,17 +943,17 @@ public class MainActivity extends Activity {
 
 		// ***** End of Database Portion *****
 
-		LatLng love = new LatLng(30.446056,-84.299587);
-		LatLng hcb = new LatLng(30.443226,-84.297034);
-		LatLng carr = new LatLng(30.445113,-84.298729);
-		LatLng caroth = new LatLng(30.445501,-84.300059);
-		LatLng rova = new LatLng(30.444225,-84.295864);
-		LatLng rovb = new LatLng(30.443762,-84.295349);
-		LatLng bel = new LatLng(30.443032,-84.295864);
-		LatLng shor = new LatLng(30.441006,-84.296025);
-		LatLng osb = new LatLng(30.443975,-84.300145);
-		LatLng fish = new LatLng(30.444086,-84.300628);
-		LatLng well = new LatLng(30.441579,-84.299169);
+		LatLng love = new LatLng(30.446056, -84.299587);
+		LatLng hcb = new LatLng(30.443226, -84.297034);
+		LatLng carr = new LatLng(30.445113, -84.298729);
+		LatLng caroth = new LatLng(30.445501, -84.300059);
+		LatLng rova = new LatLng(30.444225, -84.295864);
+		LatLng rovb = new LatLng(30.443762, -84.295349);
+		LatLng bel = new LatLng(30.443032, -84.295864);
+		LatLng shor = new LatLng(30.441006, -84.296025);
+		LatLng osb = new LatLng(30.443975, -84.300145);
+		LatLng fish = new LatLng(30.444086, -84.300628);
+		LatLng well = new LatLng(30.441579, -84.299169);
 
 		// count_classes(getDay(), getTime());
 		count_classes(day, time, semester);
@@ -834,7 +969,6 @@ public class MainActivity extends Activity {
 		Log.i("marker", String.valueOf(RBA));
 		Log.i("marker", String.valueOf(RBB));
 		Log.i("marker", String.valueOf(MCH));
-
 
 		if (LOV == 0) {
 			mo_lov = new MarkerOptions()
@@ -886,8 +1020,8 @@ public class MainActivity extends Activity {
 					.title("Love Building")
 					.position(love)
 					.icon(BitmapDescriptorFactory
-							.fromResource(R.drawable.circle_red))
-					.visible(true).draggable(false);
+							.fromResource(R.drawable.circle_red)).visible(true)
+					.draggable(false);
 		}
 
 		if (HCB == 0) {
@@ -925,7 +1059,7 @@ public class MainActivity extends Activity {
 							.fromResource(R.drawable.circle_yellow))
 					.visible(true).draggable(false);
 		}
-		
+
 		else if (HCB > 30 && HCB <= 40) {
 			mo_hcb = new MarkerOptions()
 					.title("HCB")
@@ -940,10 +1074,10 @@ public class MainActivity extends Activity {
 					.title("HCB")
 					.position(hcb)
 					.icon(BitmapDescriptorFactory
-							.fromResource(R.drawable.circle_red))
-					.visible(true).draggable(false);
+							.fromResource(R.drawable.circle_red)).visible(true)
+					.draggable(false);
 		}
-		
+
 		if (MCH == 0) {
 			mo_caroth = new MarkerOptions()
 					.title("Corothers")
@@ -979,7 +1113,7 @@ public class MainActivity extends Activity {
 							.fromResource(R.drawable.circle_yellow))
 					.visible(true).draggable(false);
 		}
-		
+
 		else if (MCH > 30 && MCH <= 40) {
 			mo_caroth = new MarkerOptions()
 					.title("Corothers")
@@ -988,14 +1122,14 @@ public class MainActivity extends Activity {
 							.fromResource(R.drawable.circle_orange))
 					.visible(true).draggable(false);
 		}
-		
+
 		else if (MCH > 40) {
 			mo_caroth = new MarkerOptions()
 					.title("Corothers")
 					.position(caroth)
 					.icon(BitmapDescriptorFactory
-							.fromResource(R.drawable.circle_red))
-					.visible(true).draggable(false);
+							.fromResource(R.drawable.circle_red)).visible(true)
+					.draggable(false);
 		}
 
 		if (CAR == 0) {
@@ -1033,7 +1167,7 @@ public class MainActivity extends Activity {
 							.fromResource(R.drawable.circle_yellow))
 					.visible(true).draggable(false);
 		}
-		
+
 		else if (CAR > 30 && CAR <= 40) {
 			mo_carr = new MarkerOptions()
 					.title("Carraway")
@@ -1042,14 +1176,14 @@ public class MainActivity extends Activity {
 							.fromResource(R.drawable.circle_orange))
 					.visible(true).draggable(false);
 		}
-		
-		else if (CAR >  40) {
+
+		else if (CAR > 40) {
 			mo_carr = new MarkerOptions()
 					.title("Carraway")
 					.position(carr)
 					.icon(BitmapDescriptorFactory
-							.fromResource(R.drawable.circle_red))
-					.visible(true).draggable(false);
+							.fromResource(R.drawable.circle_red)).visible(true)
+					.draggable(false);
 		}
 
 		if (BEL == 0) {
@@ -1087,7 +1221,7 @@ public class MainActivity extends Activity {
 							.fromResource(R.drawable.circle_yellow))
 					.visible(true).draggable(false);
 		}
-		
+
 		else if (BEL > 30 && BEL <= 40) {
 			mo_bel = new MarkerOptions()
 					.title("Bellamy")
@@ -1096,14 +1230,14 @@ public class MainActivity extends Activity {
 							.fromResource(R.drawable.circle_orange))
 					.visible(true).draggable(false);
 		}
-		
+
 		else if (BEL > 40) {
 			mo_bel = new MarkerOptions()
 					.title("Bellamy")
 					.position(bel)
 					.icon(BitmapDescriptorFactory
-							.fromResource(R.drawable.circle_red))
-					.visible(true).draggable(false);
+							.fromResource(R.drawable.circle_red)).visible(true)
+					.draggable(false);
 		}
 
 		if (RBA == 0) {
@@ -1141,7 +1275,7 @@ public class MainActivity extends Activity {
 							.fromResource(R.drawable.circle_yellow))
 					.visible(true).draggable(false);
 		}
-		
+
 		else if (RBA > 30 && RBA <= 40) {
 			mo_rova = new MarkerOptions()
 					.title("Rovetta A")
@@ -1150,14 +1284,14 @@ public class MainActivity extends Activity {
 							.fromResource(R.drawable.circle_orange))
 					.visible(true).draggable(false);
 		}
-		
+
 		else if (RBA > 40) {
 			mo_rova = new MarkerOptions()
 					.title("Rovetta A")
 					.position(rova)
 					.icon(BitmapDescriptorFactory
-							.fromResource(R.drawable.circle_red))
-					.visible(true).draggable(false);
+							.fromResource(R.drawable.circle_red)).visible(true)
+					.draggable(false);
 		}
 
 		if (RBB == 0) {
@@ -1195,7 +1329,7 @@ public class MainActivity extends Activity {
 							.fromResource(R.drawable.circle_yellow))
 					.visible(true).draggable(false);
 		}
-		
+
 		else if (RBB > 30 && RBB <= 40) {
 			mo_rovb = new MarkerOptions()
 					.title("Rovetta B")
@@ -1204,14 +1338,14 @@ public class MainActivity extends Activity {
 							.fromResource(R.drawable.circle_orange))
 					.visible(true).draggable(false);
 		}
-		
+
 		else if (RBB > 40) {
 			mo_rovb = new MarkerOptions()
 					.title("Rovetta B")
 					.position(rovb)
 					.icon(BitmapDescriptorFactory
-							.fromResource(R.drawable.circle_red))
-					.visible(true).draggable(false);
+							.fromResource(R.drawable.circle_red)).visible(true)
+					.draggable(false);
 		}
 
 		if (FLH == 0) {
@@ -1249,7 +1383,7 @@ public class MainActivity extends Activity {
 							.fromResource(R.drawable.circle_yellow))
 					.visible(true).draggable(false);
 		}
-		
+
 		else if (FLH > 30 && FLH <= 40) {
 			mo_fish = new MarkerOptions()
 					.title("Fisher")
@@ -1258,14 +1392,14 @@ public class MainActivity extends Activity {
 							.fromResource(R.drawable.circle_orange))
 					.visible(true).draggable(false);
 		}
-		
+
 		else if (FLH > 40) {
 			mo_fish = new MarkerOptions()
 					.title("Fisher")
 					.position(fish)
 					.icon(BitmapDescriptorFactory
-							.fromResource(R.drawable.circle_red))
-					.visible(true).draggable(false);
+							.fromResource(R.drawable.circle_red)).visible(true)
+					.draggable(false);
 		}
 
 		if (HWC == 0) {
@@ -1303,7 +1437,7 @@ public class MainActivity extends Activity {
 							.fromResource(R.drawable.circle_yellow))
 					.visible(true).draggable(false);
 		}
-		
+
 		else if (HWC > 30 && HWC <= 40) {
 			mo_wel = new MarkerOptions()
 					.title("Health and Wellness Center")
@@ -1312,14 +1446,14 @@ public class MainActivity extends Activity {
 							.fromResource(R.drawable.circle_orange))
 					.visible(true).draggable(false);
 		}
-		
+
 		else if (HWC > 40) {
 			mo_wel = new MarkerOptions()
 					.title("Health and Wellness Center")
 					.position(well)
 					.icon(BitmapDescriptorFactory
-							.fromResource(R.drawable.circle_red))
-					.visible(true).draggable(false);
+							.fromResource(R.drawable.circle_red)).visible(true)
+					.draggable(false);
 		}
 
 		if (LSB == 0) {
@@ -1357,7 +1491,7 @@ public class MainActivity extends Activity {
 							.fromResource(R.drawable.circle_yellow))
 					.visible(true).draggable(false);
 		}
-		
+
 		else if (LSB > 30 && LSB <= 40) {
 			mo_shor = new MarkerOptions()
 					.title("Shores")
@@ -1366,16 +1500,16 @@ public class MainActivity extends Activity {
 							.fromResource(R.drawable.circle_orange))
 					.visible(true).draggable(false);
 		}
-		
+
 		else if (LSB > 40) {
 			mo_shor = new MarkerOptions()
 					.title("Shores")
 					.position(shor)
 					.icon(BitmapDescriptorFactory
-							.fromResource(R.drawable.circle_red))
-					.visible(true).draggable(false);
+							.fromResource(R.drawable.circle_red)).visible(true)
+					.draggable(false);
 		}
-		
+
 		if (OSB == 0) {
 			mo_osb = new MarkerOptions()
 					.title("OSB")
@@ -1420,18 +1554,16 @@ public class MainActivity extends Activity {
 							.fromResource(R.drawable.circle_orange))
 					.visible(true).draggable(false);
 		}
-		
+
 		else if (OSB > 40) {
 			mo_osb = new MarkerOptions()
 					.title("OSB")
 					.position(osb)
 					.icon(BitmapDescriptorFactory
-							.fromResource(R.drawable.circle_red))
-					.visible(true).draggable(false);
+							.fromResource(R.drawable.circle_red)).visible(true)
+					.draggable(false);
 		}
-		
-		
-		
+
 		map.addMarker(mo_lov);
 		map.addMarker(mo_hcb);
 		map.addMarker(mo_carr);
@@ -1443,13 +1575,13 @@ public class MainActivity extends Activity {
 		map.addMarker(mo_shor);
 		map.addMarker(mo_fish);
 		map.addMarker(mo_osb);
-		
+
 		map.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
-			
+
 			@Override
 			public void onInfoWindowClick(Marker marker) {
 				marker.hideInfoWindow();
-				
+
 			}
 		});
 
@@ -1466,7 +1598,7 @@ public class MainActivity extends Activity {
 						.equals(mo_lov.getTitle().toString())) {
 					marker.setSnippet("In-Use: " + String.valueOf(LOV));
 				}
-				
+
 				if (marker.getTitle().toString()
 						.equals(mo_caroth.getTitle().toString())) {
 					marker.setSnippet("In-Use: " + String.valueOf(MCH));
@@ -1476,7 +1608,7 @@ public class MainActivity extends Activity {
 						.equals(mo_carr.getTitle().toString())) {
 					marker.setSnippet("In-Use: " + String.valueOf(CAR));
 				}
-				
+
 				if (marker.getTitle().toString()
 						.equals(mo_rova.getTitle().toString())) {
 					marker.setSnippet("In-Use: " + String.valueOf(RBA));
@@ -1486,7 +1618,7 @@ public class MainActivity extends Activity {
 						.equals(mo_rovb.getTitle().toString())) {
 					marker.setSnippet("In-Use: " + String.valueOf(RBB));
 				}
-				
+
 				if (marker.getTitle().toString()
 						.equals(mo_bel.getTitle().toString())) {
 					marker.setSnippet("In-Use: " + String.valueOf(BEL));
@@ -1496,7 +1628,7 @@ public class MainActivity extends Activity {
 						.equals(mo_shor.getTitle().toString())) {
 					marker.setSnippet("In-Use: " + String.valueOf(LSB));
 				}
-				
+
 				if (marker.getTitle().toString()
 						.equals(mo_wel.getTitle().toString())) {
 					marker.setSnippet("In-Use: " + String.valueOf(HWC));
@@ -1506,15 +1638,15 @@ public class MainActivity extends Activity {
 						.equals(mo_osb.getTitle().toString())) {
 					marker.setSnippet("In-Use: " + String.valueOf(OSB));
 				}
-				
+
 				if (marker.getTitle().toString()
 						.equals(mo_fish.getTitle().toString())) {
 					marker.setSnippet("In-Use: " + String.valueOf(FLH));
 				}
-				
+
 				return false;
 			}
 		});
 	}
-	
+
 }

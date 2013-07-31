@@ -1,34 +1,66 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
-     <item 
-        android:id="@+id/dividerBar"
-        android:showAsAction="always"
-        android:orderInCategory="1"
-        android:enabled="false" />
-    
-    <item 
+
+    <item
         android:id="@+id/menuCurrent"
+        android:orderInCategory="3"
         android:showAsAction="always"
-        android:title="Current"
-        android:orderInCategory="2" />
-    
+        android:title="Current"/>
+    <item
+        android:id="@+id/menuKey"
+        android:orderInCategory="4"
+        android:showAsAction="always"
+        android:title="Key"/>
     <item
         android:id="@+id/menuSem"
         android:actionViewClass="android.widget.Spinner"
-        android:showAsAction="always"
-        android:orderInCategory="3" />
+        android:orderInCategory="1"
+        android:showAsAction="always"/>
     <item
         android:id="@+id/menuDay"
         android:actionViewClass="android.widget.Spinner"
-        android:showAsAction="always"
-        android:orderInCategory="4" />
-    
-</menu>
+        android:orderInCategory="2"
+        android:showAsAction="always"/>
 
-  <!-- 
+</menu><!--
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:showAsAction="never"
-        android:title="@string/action_settings"/>
-         -->
+        android:title="@string/action_settings"/>
+    <item
+        android:id="@+id/dividerBar"
+        android:enabled="false"
+        android:orderInCategory="1"
+        android:showAsAction="always"/>
+    <item
+        android:id="@+id/menuBlueDot"
+        android:icon="@drawable/circle_blue"
+        android:orderInCategory="5"
+        android:showAsAction="always|withText"
+        android:title="1-5"/>
+    <item
+        android:id="@+id/menuGreenDot"
+        android:icon="@drawable/circle_geen"
+        android:orderInCategory="6"
+        android:showAsAction="always|withText"
+        android:title="6-10"/>
+    <item
+        android:id="@+id/menuYellowDot"
+        android:icon="@drawable/circle_yellow"
+        android:orderInCategory="7"
+        android:showAsAction="always|withText"
+        android:title="11-15"/>
+    <item
+        android:id="@+id/menuOrangeDot"
+        android:icon="@drawable/circle_orange"
+        android:orderInCategory="8"
+        android:showAsAction="always|withText"
+        android:title="16-20"/>
+    <item
+        android:id="@+id/menuRedDot"
+        android:icon="@drawable/circle_red"
+        android:orderInCategory="9"
+        android:showAsAction="always|withText"
+        android:title="21-Up"/>
+-->
