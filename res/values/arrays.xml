@@ -7,11 +7,11 @@
         <item>"Fall"</item>
     </string-array>
     <string-array name="day_options">
-        <item>"Monday"</item>
-        <item>"Tuesday"</item>
-        <item>"Wednesday"</item>
-        <item>"Thursday"</item>
-        <item>"Friday"</item>
+        <item>"Mon"</item>
+        <item>"Tues"</item>
+        <item>"Wed"</item>
+        <item>"Thurs"</item>
+        <item>"Fri"</item>
     </string-array>
 
 </resources>
