@@ -349,7 +349,7 @@ public class MainActivity extends Activity {
 
             //set up text
             TextView text = (TextView) dialog.findViewById(R.id.blueDotTV);
-            text.setText("1-5");
+            text.setText("1-4");
             
           //set up image view
             ImageView img2 = (ImageView) dialog.findViewById(R.id.greenDotIV);
@@ -357,7 +357,7 @@ public class MainActivity extends Activity {
 
             //set up text
             TextView text2 = (TextView) dialog.findViewById(R.id.greenDotTV);
-            text2.setText("6-10");
+            text2.setText("5-8");
             
           //set up image view
             ImageView img3 = (ImageView) dialog.findViewById(R.id.yellowDotIV);
@@ -365,7 +365,7 @@ public class MainActivity extends Activity {
 
             //set up text
             TextView text3 = (TextView) dialog.findViewById(R.id.yellowDotTV);
-            text3.setText("11-15");
+            text3.setText("9-12");
             
           //set up image view
             ImageView img4 = (ImageView) dialog.findViewById(R.id.orangeDotIV);
@@ -373,7 +373,7 @@ public class MainActivity extends Activity {
 
             //set up text
             TextView text4 = (TextView) dialog.findViewById(R.id.orangeDotTV);
-            text4.setText("16-20");
+            text4.setText("13-16");
             
           //set up image view
             ImageView img5 = (ImageView) dialog.findViewById(R.id.redDotIV);
@@ -381,7 +381,7 @@ public class MainActivity extends Activity {
 
             //set up text
             TextView text5 = (TextView) dialog.findViewById(R.id.redDotTV);
-            text5.setText("21-Up");
+            text5.setText("17-Up");
             
             //set up button
             Button button = (Button) dialog.findViewById(R.id.Button01);
