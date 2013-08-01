@@ -979,7 +979,7 @@ public class MainActivity extends Activity {
 					.visible(false).draggable(false);
 		}
 
-		else if (LOV > 0 && LOV <= 10) {
+		else if (LOV > 0 && LOV <= 4) {
 			mo_lov = new MarkerOptions()
 					.title("Love Building")
 					.position(love)
@@ -988,7 +988,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (LOV > 10 && LOV <= 20) {
+		else if (LOV > 4 && LOV <= 8) {
 			mo_lov = new MarkerOptions()
 					.title("Love Building")
 					.position(love)
@@ -997,7 +997,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (LOV > 20 && LOV <= 30) {
+		else if (LOV > 8 && LOV <= 12) {
 			mo_lov = new MarkerOptions()
 					.title("Love Building")
 					.position(love)
@@ -1006,7 +1006,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (LOV > 30 && LOV <= 40) {
+		else if (LOV > 12 && LOV <= 16) {
 			mo_lov = new MarkerOptions()
 					.title("Love Building")
 					.position(love)
@@ -1015,7 +1015,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (LOV > 40) {
+		else if (LOV > 16) {
 			mo_lov = new MarkerOptions()
 					.title("Love Building")
 					.position(love)
@@ -1033,7 +1033,7 @@ public class MainActivity extends Activity {
 					.visible(false).draggable(false);
 		}
 
-		else if (HCB > 0 && HCB <= 10) {
+		else if (HCB > 0 && HCB <= 4) {
 			mo_hcb = new MarkerOptions()
 					.title("HCB")
 					.position(hcb)
@@ -1042,7 +1042,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (HCB > 10 && HCB <= 20) {
+		else if (HCB > 4 && HCB <= 8) {
 			mo_hcb = new MarkerOptions()
 					.title("HCB")
 					.position(hcb)
@@ -1051,7 +1051,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (HCB > 20 && HCB <= 30) {
+		else if (HCB > 8 && HCB <= 12) {
 			mo_hcb = new MarkerOptions()
 					.title("HCB")
 					.position(hcb)
@@ -1060,7 +1060,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (HCB > 30 && HCB <= 40) {
+		else if (HCB > 12 && HCB <= 16) {
 			mo_hcb = new MarkerOptions()
 					.title("HCB")
 					.position(hcb)
@@ -1069,7 +1069,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (HCB > 40) {
+		else if (HCB > 16) {
 			mo_hcb = new MarkerOptions()
 					.title("HCB")
 					.position(hcb)
@@ -1087,7 +1087,7 @@ public class MainActivity extends Activity {
 					.visible(false).draggable(false);
 		}
 
-		else if (MCH > 0 && MCH <= 10) {
+		else if (MCH > 0 && MCH <= 4) {
 			mo_caroth = new MarkerOptions()
 					.title("Corothers")
 					.position(caroth)
@@ -1096,7 +1096,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (MCH > 10 && MCH <= 20) {
+		else if (MCH > 4 && MCH <= 8) {
 			mo_caroth = new MarkerOptions()
 					.title("Corothers")
 					.position(caroth)
@@ -1105,7 +1105,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (MCH > 20 && MCH <= 30) {
+		else if (MCH > 8 && MCH <= 12) {
 			mo_caroth = new MarkerOptions()
 					.title("Corothers")
 					.position(caroth)
@@ -1114,7 +1114,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (MCH > 30 && MCH <= 40) {
+		else if (MCH > 12 && MCH <= 16) {
 			mo_caroth = new MarkerOptions()
 					.title("Corothers")
 					.position(caroth)
@@ -1123,7 +1123,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (MCH > 40) {
+		else if (MCH > 16) {
 			mo_caroth = new MarkerOptions()
 					.title("Corothers")
 					.position(caroth)
@@ -1141,7 +1141,7 @@ public class MainActivity extends Activity {
 					.visible(false).draggable(false);
 		}
 
-		else if (CAR > 0 && CAR <= 10) {
+		else if (CAR > 0 && CAR <= 4) {
 			mo_carr = new MarkerOptions()
 					.title("Carraway")
 					.position(carr)
@@ -1150,7 +1150,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (CAR > 10 && CAR <= 20) {
+		else if (CAR > 4 && CAR <= 8) {
 			mo_carr = new MarkerOptions()
 					.title("Carraway")
 					.position(carr)
@@ -1159,7 +1159,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (CAR > 20 && CAR <= 30) {
+		else if (CAR > 8 && CAR <= 12) {
 			mo_carr = new MarkerOptions()
 					.title("Carraway")
 					.position(carr)
@@ -1168,7 +1168,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (CAR > 30 && CAR <= 40) {
+		else if (CAR > 12 && CAR <= 16) {
 			mo_carr = new MarkerOptions()
 					.title("Carraway")
 					.position(carr)
@@ -1177,7 +1177,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (CAR > 40) {
+		else if (CAR > 16) {
 			mo_carr = new MarkerOptions()
 					.title("Carraway")
 					.position(carr)
@@ -1195,7 +1195,7 @@ public class MainActivity extends Activity {
 					.visible(false).draggable(false);
 		}
 
-		else if (BEL > 0 && BEL <= 10) {
+		else if (BEL > 0 && BEL <= 4) {
 			mo_bel = new MarkerOptions()
 					.title("Bellamy")
 					.position(bel)
@@ -1204,7 +1204,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (BEL > 10 && BEL <= 20) {
+		else if (BEL > 4 && BEL <= 8) {
 			mo_bel = new MarkerOptions()
 					.title("Bellamy")
 					.position(bel)
@@ -1213,7 +1213,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (BEL > 20 && BEL <= 30) {
+		else if (BEL > 8 && BEL <= 12) {
 			mo_bel = new MarkerOptions()
 					.title("Bellamy")
 					.position(bel)
@@ -1222,7 +1222,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (BEL > 30 && BEL <= 40) {
+		else if (BEL > 12 && BEL <= 16) {
 			mo_bel = new MarkerOptions()
 					.title("Bellamy")
 					.position(bel)
@@ -1231,7 +1231,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (BEL > 40) {
+		else if (BEL > 16) {
 			mo_bel = new MarkerOptions()
 					.title("Bellamy")
 					.position(bel)
@@ -1249,7 +1249,7 @@ public class MainActivity extends Activity {
 					.visible(false).draggable(false);
 		}
 
-		else if (RBA > 0 && RBA <= 10) {
+		else if (RBA > 0 && RBA <= 4) {
 			mo_rova = new MarkerOptions()
 					.title("Rovetta A")
 					.position(rova)
@@ -1258,7 +1258,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (RBA > 10 && RBA <= 20) {
+		else if (RBA > 4 && RBA <= 8) {
 			mo_rova = new MarkerOptions()
 					.title("Rovetta A")
 					.position(rova)
@@ -1267,7 +1267,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (RBA > 20 && RBA <= 30) {
+		else if (RBA > 8 && RBA <= 12) {
 			mo_rova = new MarkerOptions()
 					.title("Rovetta A")
 					.position(rova)
@@ -1276,7 +1276,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (RBA > 30 && RBA <= 40) {
+		else if (RBA > 12 && RBA <= 16) {
 			mo_rova = new MarkerOptions()
 					.title("Rovetta A")
 					.position(rova)
@@ -1285,7 +1285,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (RBA > 40) {
+		else if (RBA > 16) {
 			mo_rova = new MarkerOptions()
 					.title("Rovetta A")
 					.position(rova)
@@ -1303,7 +1303,7 @@ public class MainActivity extends Activity {
 					.visible(false).draggable(false);
 		}
 
-		else if (RBB > 0 && RBB <= 10) {
+		else if (RBB > 0 && RBB <= 4) {
 			mo_rovb = new MarkerOptions()
 					.title("Rovetta B")
 					.position(rovb)
@@ -1312,7 +1312,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (RBB > 10 && RBB <= 20) {
+		else if (RBB > 4 && RBB <= 8) {
 			mo_rovb = new MarkerOptions()
 					.title("Rovetta B")
 					.position(rovb)
@@ -1321,7 +1321,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (RBB > 20 && RBB <= 30) {
+		else if (RBB > 8 && RBB <= 12) {
 			mo_rovb = new MarkerOptions()
 					.title("Rovetta B")
 					.position(rovb)
@@ -1330,7 +1330,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (RBB > 30 && RBB <= 40) {
+		else if (RBB > 12 && RBB <= 16) {
 			mo_rovb = new MarkerOptions()
 					.title("Rovetta B")
 					.position(rovb)
@@ -1339,7 +1339,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (RBB > 40) {
+		else if (RBB > 16) {
 			mo_rovb = new MarkerOptions()
 					.title("Rovetta B")
 					.position(rovb)
@@ -1357,7 +1357,7 @@ public class MainActivity extends Activity {
 					.visible(false).draggable(false);
 		}
 
-		else if (FLH > 0 && FLH <= 10) {
+		else if (FLH > 0 && FLH <= 4) {
 			mo_fish = new MarkerOptions()
 					.title("Fisher")
 					.position(fish)
@@ -1366,7 +1366,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (FLH > 10 && RBB <= 20) {
+		else if (FLH > 4 && RBB <= 8) {
 			mo_fish = new MarkerOptions()
 					.title("Fisher")
 					.position(fish)
@@ -1375,7 +1375,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (FLH > 20 && FLH <= 30) {
+		else if (FLH > 8 && FLH <= 12) {
 			mo_fish = new MarkerOptions()
 					.title("Fisher")
 					.position(fish)
@@ -1384,7 +1384,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (FLH > 30 && FLH <= 40) {
+		else if (FLH > 12 && FLH <= 16) {
 			mo_fish = new MarkerOptions()
 					.title("Fisher")
 					.position(fish)
@@ -1393,7 +1393,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (FLH > 40) {
+		else if (FLH > 16) {
 			mo_fish = new MarkerOptions()
 					.title("Fisher")
 					.position(fish)
@@ -1411,7 +1411,7 @@ public class MainActivity extends Activity {
 					.visible(false).draggable(false);
 		}
 
-		else if (HWC > 0 && HWC <= 10) {
+		else if (HWC > 0 && HWC <= 4) {
 			mo_wel = new MarkerOptions()
 					.title("Health and Wellness Center")
 					.position(well)
@@ -1420,7 +1420,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (HWC > 10 && HWC <= 20) {
+		else if (HWC > 4 && HWC <= 8) {
 			mo_wel = new MarkerOptions()
 					.title("Health and Wellness Center")
 					.position(well)
@@ -1429,7 +1429,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (HWC > 20 && HWC <= 30) {
+		else if (HWC > 8 && HWC <= 12) {
 			mo_wel = new MarkerOptions()
 					.title("Health and Wellness Center")
 					.position(well)
@@ -1438,7 +1438,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (HWC > 30 && HWC <= 40) {
+		else if (HWC > 12 && HWC <= 16) {
 			mo_wel = new MarkerOptions()
 					.title("Health and Wellness Center")
 					.position(well)
@@ -1447,7 +1447,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (HWC > 40) {
+		else if (HWC > 16) {
 			mo_wel = new MarkerOptions()
 					.title("Health and Wellness Center")
 					.position(well)
@@ -1465,7 +1465,7 @@ public class MainActivity extends Activity {
 					.visible(false).draggable(false);
 		}
 
-		else if (LSB > 0 && LSB <= 10) {
+		else if (LSB > 0 && LSB <= 4) {
 			mo_shor = new MarkerOptions()
 					.title("Shores")
 					.position(shor)
@@ -1474,7 +1474,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (LSB > 10 && LSB <= 20) {
+		else if (LSB > 4 && LSB <= 8) {
 			mo_shor = new MarkerOptions()
 					.title("Shores")
 					.position(shor)
@@ -1483,7 +1483,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (LSB > 20 && LSB <= 30) {
+		else if (LSB > 8 && LSB <= 12) {
 			mo_shor = new MarkerOptions()
 					.title("Shores")
 					.position(shor)
@@ -1492,7 +1492,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (LSB > 30 && LSB <= 40) {
+		else if (LSB > 12 && LSB <= 16) {
 			mo_shor = new MarkerOptions()
 					.title("Shores")
 					.position(shor)
@@ -1501,7 +1501,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (LSB > 40) {
+		else if (LSB > 16) {
 			mo_shor = new MarkerOptions()
 					.title("Shores")
 					.position(shor)
@@ -1519,7 +1519,7 @@ public class MainActivity extends Activity {
 					.visible(false).draggable(false);
 		}
 
-		else if (OSB > 0 && OSB <= 10) {
+		else if (OSB > 0 && OSB <= 4) {
 			mo_osb = new MarkerOptions()
 					.title("OSB")
 					.position(osb)
@@ -1528,7 +1528,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (OSB > 10 && OSB <= 20) {
+		else if (OSB > 4 && OSB <= 8) {
 			mo_osb = new MarkerOptions()
 					.title("OSB")
 					.position(osb)
@@ -1537,7 +1537,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (OSB > 20 && OSB <= 30) {
+		else if (OSB > 8 && OSB <= 12) {
 			mo_osb = new MarkerOptions()
 					.title("OSB")
 					.position(osb)
@@ -1546,7 +1546,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (OSB > 30 && OSB <= 40) {
+		else if (OSB > 12 && OSB <= 16) {
 			mo_osb = new MarkerOptions()
 					.title("OSB")
 					.position(osb)
@@ -1555,7 +1555,7 @@ public class MainActivity extends Activity {
 					.visible(true).draggable(false);
 		}
 
-		else if (OSB > 40) {
+		else if (OSB > 16) {
 			mo_osb = new MarkerOptions()
 					.title("OSB")
 					.position(osb)
